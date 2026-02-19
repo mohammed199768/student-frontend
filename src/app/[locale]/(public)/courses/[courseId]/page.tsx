@@ -4,7 +4,7 @@ import { Play, Lock, Globe, Star, CheckCircle, Clock, BookOpen, User } from 'luc
 import { CoursePreviewPlayer } from '@/components/courses/course-preview-player';
 import { Navbar } from '@/components/common/navbar';
 import { getTranslations } from 'next-intl/server';
-// formatCurrency removed
+import { formatPrice } from '@/lib/utils';
 
 interface PageProps {
     params: Promise<{
@@ -12,14 +12,6 @@ interface PageProps {
         locale: string;
     }>;
 }
-
-// Helper to format currency if utility missing (simplified)
-const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ar-SA', {
-        style: 'currency',
-        currency: 'SAR',
-    }).format(price);
-};
 
 export default async function CourseDetailPage({ params }: PageProps) {
     const { courseId, locale } = await params;
