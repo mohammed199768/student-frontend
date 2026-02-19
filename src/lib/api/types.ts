@@ -29,6 +29,7 @@ export interface Course {
     isFeatured: boolean;
     instructorId: string;
     universityId?: string;
+    university?: University;
     majorId?: string;
     subjectId?: string;
     level?: string;

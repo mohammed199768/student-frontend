@@ -10,20 +10,16 @@ interface CoursesPageProps {
     searchParams: Promise<{
         q?: string;
         universityId?: string;
-        majorId?: string;
         subjectId?: string;
     }>;
 }
 
-async function getData(params: { q?: string; universityId?: string; majorId?: string; subjectId?: string }) {
+async function getData(params: { q?: string; universityId?: string; subjectId?: string }) {
     try {
         const [universitiesRes, coursesRes] = await Promise.all([
             apiClient.get('/catalog/universities'),
             apiClient.get('/catalog/courses', { params })
         ]);
-
-        console.log('Universities Data:', JSON.stringify(universitiesRes.data, null, 2));
-        console.log('Courses Data:', JSON.stringify(coursesRes.data, null, 2));
 
         return {
             universities: (universitiesRes.data.data as University[]) || [],
@@ -38,8 +34,8 @@ async function getData(params: { q?: string; universityId?: string; majorId?: st
 export const dynamic = 'force-dynamic';
 
 export default async function CoursesPage({ searchParams }: CoursesPageProps) {
-    const { q, universityId, majorId, subjectId } = await searchParams;
-    const { universities, courses } = await getData({ q, universityId, majorId, subjectId });
+    const { q, universityId, subjectId } = await searchParams;
+    const { universities, courses } = await getData({ q, universityId, subjectId });
     const t = await getTranslations('courses');
     const tc = await getTranslations('common');
 
@@ -90,15 +86,6 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                                             {universities.map(uni => (
                                                 <option key={uni.id} value={uni.id}>{uni.name}</option>
                                             ))}
-                                        </select>
-                                    </div>
-
-                                    {/* Major */}
-                                    <div>
-                                        <label className="text-sm font-bold text-slate-900 mb-3 block">{t('major_label')}</label>
-                                        <select className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-sm focus:border-indigo-600 focus:outline-none">
-                                            <option value="">{t('all_majors')}</option>
-                                            {/* Cascading logic would be here */}
                                         </select>
                                     </div>
 

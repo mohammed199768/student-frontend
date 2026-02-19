@@ -18,7 +18,7 @@ export function CourseCard({ course, variant = 'light' }: CourseCardProps) {
 
     const textSub = isDark ? "text-slate-400" : "text-slate-500";
     const priceColor = isDark ? "text-white" : "text-slate-900";
-    const pillClass = isDark ? "bg-white/10 text-indigo-300" : "bg-indigo-50 text-indigo-600";
+    const pillClass = isDark ? "bg-white/10 text-indigo-200" : "bg-indigo-50 text-indigo-700";
     const borderClass = isDark ? "border-white/10" : "border-slate-100";
     const btnClass = isDark ? "bg-indigo-600 hover:bg-indigo-500" : "bg-slate-900 hover:bg-indigo-600";
 
@@ -40,8 +40,8 @@ export function CourseCard({ course, variant = 'light' }: CourseCardProps) {
 
             <div className="flex flex-1 flex-col p-5">
                 <div className="mb-4 flex items-center justify-between">
-                    <span className={`text-xs font-medium px-2 py-1 rounded-md ${pillClass}`}>
-                        {course.level || ct('all_levels')}
+                    <span className={`text-sm md:text-base font-bold px-3 py-1.5 rounded-md ${pillClass}`}>
+                        {course.university?.name || 'University'}
                     </span>
                 </div>
 
