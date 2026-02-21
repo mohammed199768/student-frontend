@@ -4,7 +4,7 @@ import { Play, Lock, Globe, Star, CheckCircle, Clock, BookOpen, User } from 'luc
 import { CoursePreviewPlayer } from '@/components/courses/course-preview-player';
 import { Navbar } from '@/components/common/navbar';
 import { getTranslations } from 'next-intl/server';
-import { formatPrice } from '@/lib/utils';
+import { formatPrice, withLatinDigits } from '@/lib/utils';
 
 interface PageProps {
     params: Promise<{
@@ -83,7 +83,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Clock className="w-4 h-4" />
-                                    <span>آخر تحديث: {new Date(course.updatedAt).toLocaleDateString(locale)}</span>
+                                    <span>آخر تحديث: {new Date(course.updatedAt).toLocaleDateString(withLatinDigits(locale))}</span>
                                 </div>
                             </div>
                         </div>
