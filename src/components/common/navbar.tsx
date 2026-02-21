@@ -11,7 +11,6 @@ import {
     Home,
     BookOpen,
     LogIn,
-    Info,
     MessageCircle,
     Menu,
     X,
@@ -37,7 +36,6 @@ export function Navbar() {
     const desktopNavLinks = [
         { href: '/', label: t('home') },
         { href: '/courses', label: t('courses') },
-        { href: '/about', label: t('about') },
         { href: '/contact', label: t('contact') },
     ];
 
@@ -154,14 +152,6 @@ export function Navbar() {
             {isMobileMoreOpen && (
                 <div className="fixed inset-x-0 bottom-20 z-50 border-t border-white/10 bg-slate-900/95 p-4 backdrop-blur-md md:hidden">
                     <div className="grid grid-cols-2 gap-2">
-                        <Link
-                            href="/about"
-                            onClick={() => setIsMobileMoreOpen(false)}
-                            className="flex items-center gap-2 rounded-xl bg-white/5 px-3 py-3 text-sm font-medium text-slate-200"
-                        >
-                            <Info className="h-4 w-4" />
-                            {t('about')}
-                        </Link>
                         <Link
                             href="/contact"
                             onClick={() => setIsMobileMoreOpen(false)}

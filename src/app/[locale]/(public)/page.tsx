@@ -114,7 +114,7 @@ export default async function HomePage() {
                                     {t('cta_button_primary')}
                                 </Link>
                                 <Link
-                                    href="/about"
+                                    href="/courses"
                                     className="rounded-full border border-white/20 bg-white/5 backdrop-blur-sm px-10 py-5 text-xl font-bold text-white transition-all hover:bg-white/10 active:scale-95"
                                 >
                                     {t('cta_button_secondary')}

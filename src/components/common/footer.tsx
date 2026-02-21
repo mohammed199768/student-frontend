@@ -27,11 +27,6 @@ export function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/about" className="text-slate-300 hover:text-indigo-400 transition-colors">
-                                    {tc('about')}
-                                </Link>
-                            </li>
-                            <li>
                                 <Link href="/contact" className="text-slate-300 hover:text-indigo-400 transition-colors">
                                     {tc('contact')}
                                 </Link>

@@ -68,7 +68,7 @@ export function HeroSection() {
                             {t('hero_cta_primary')}
                         </Link>
                         <Link
-                            href="/about"
+                            href="/courses"
                             className="w-full sm:w-auto px-8 py-5 rounded-2xl bg-slate-800 text-white font-bold text-lg border border-slate-700 hover:bg-slate-700 transition-all hover:scale-105 active:scale-95 flex items-center justify-center"
                         >
                             <Play className="w-5 h-5 ml-2 fill-current" />
