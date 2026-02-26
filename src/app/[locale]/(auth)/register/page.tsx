@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/lib/contexts/auth-context';
 import { apiClient } from '@/lib/api/client';
-import { Link, useRouter } from '@/i18n/routing';
+import { Link } from '@/i18n/routing';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -13,6 +13,7 @@ import toast from 'react-hot-toast';
 
 interface ApiError {
     response?: {
+        status?: number;
         data?: {
             message?: string;
         };
@@ -26,7 +27,6 @@ export default function RegisterPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const submitLockRef = useRef(false);
     const [showPassword, setShowPassword] = useState(false);
-    const router = useRouter();
 
     const registerSchema = z.object({
         firstName: z.string().min(2, t('validation_name_min')),
@@ -55,12 +55,19 @@ export default function RegisterPage() {
                 email: values.email,
                 password: values.password,
             });
-            await login(loginRes.data.data.accessToken);
+            await login(loginRes.data.data.accessToken, '/verify-email');
             toast.success(t('register_success'));
-            router.push('/verify-email');
         } catch (error: unknown) {
             const err = error as ApiError;
-            const message = err.response?.data?.message || t('register_error');
+            const status = err.response?.status;
+            let message = t('register_error');
+
+            if (status === 409) {
+                message = t('email_exists');
+            } else if (status === 429) {
+                message = t('too_many_attempts');
+            }
+
             toast.error(message);
         } finally {
             setIsSubmitting(false);

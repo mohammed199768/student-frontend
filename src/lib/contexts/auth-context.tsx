@@ -83,7 +83,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         document.cookie = `isLoggedIn=true; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`;
         
         await refreshUser();
-        toast.success('مرحباً بك مجدداً!');
         router.push(redirectPath || '/dashboard');
     };
 

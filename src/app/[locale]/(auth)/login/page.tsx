@@ -8,12 +8,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Mail, Lock, Loader2, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface ApiError {
     response?: {
+        status?: number;
         data?: {
             message?: string;
         };
@@ -27,6 +28,7 @@ export default function LoginPage() {
     const searchParams = useSearchParams();
     const redirectPath = searchParams.get('redirect') || '/dashboard';
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const submitLockRef = useRef(false);
     const [showPassword, setShowPassword] = useState(false);
 
     const loginSchema = z.object({
@@ -43,6 +45,8 @@ export default function LoginPage() {
     });
 
     const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+        if (submitLockRef.current) return;
+        submitLockRef.current = true;
         setIsSubmitting(true);
         try {
             const { data } = await apiClient.post<any>('/auth/login', values);
@@ -50,9 +54,19 @@ export default function LoginPage() {
             toast.success(t('login_success'));
         } catch (error: unknown) {
             const err = error as ApiError;
-            toast.error(err.response?.data?.message || t('login_error'));
+            const status = err.response?.status;
+            let message = t('login_error');
+
+            if (status === 401) {
+                message = t('invalid_credentials');
+            } else if (status === 429) {
+                message = t('too_many_attempts');
+            }
+
+            toast.error(message);
         } finally {
             setIsSubmitting(false);
+            submitLockRef.current = false;
         }
     };
 
