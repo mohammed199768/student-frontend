@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { apiClient } from '@/lib/api/client';
+import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { Lock, Eye, EyeOff } from 'lucide-react';
 
@@ -13,11 +14,26 @@ export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
   const locale = useLocale();
   const rawToken = searchParams.get('token') || '';
+  const rawApi = searchParams.get('api') || '';
   const token = (() => {
     try {
       return decodeURIComponent(rawToken).trim();
     } catch {
       return rawToken.trim();
+    }
+  })();
+  const apiOverride = (() => {
+    if (!rawApi) return '';
+    try {
+      const decoded = decodeURIComponent(rawApi).trim().replace(/\/+$/, '');
+      const parsed = new URL(decoded);
+      const allowedHosts = new Set([
+        'manalbackend-production.up.railway.app',
+        'api.manalalhihi.com',
+      ]);
+      return allowedHosts.has(parsed.host) ? decoded : '';
+    } catch {
+      return '';
     }
   })();
 
@@ -51,10 +67,19 @@ export default function ResetPasswordPage() {
     setIsLoading(true);
 
     try {
-      await apiClient.post('/auth/reset-password', {
+      const payload = {
         token,
         newPassword: formData.newPassword,
-      });
+      };
+
+      if (apiOverride) {
+        await axios.post(`${apiOverride}/auth/reset-password`, payload, {
+          withCredentials: true,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      } else {
+        await apiClient.post('/auth/reset-password', payload);
+      }
 
       toast.success(t('success'));
       router.push(`/${locale}/login`);
