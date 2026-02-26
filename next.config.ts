@@ -37,6 +37,10 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'lms-storage-manal.b-cdn.net',
+      },
+      {
+        protocol: 'https',
         hostname: 'manalbackend-production.up.railway.app',
       },
     ],
