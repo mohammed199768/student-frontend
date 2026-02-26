@@ -97,31 +97,6 @@ export default async function HomePage() {
                         </div>
                     </section>
 
-                    {/* Learning Journey CTA */}
-                    <section className="py-24 relative overflow-hidden">
-
-
-                        <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                            <h2 className="text-4xl font-extrabold mb-8 text-white capitalize">{t('cta_title')}</h2>
-                            <p className="text-xl text-indigo-100 mb-12 max-w-2xl mx-auto">
-                                {t('cta_desc')}
-                            </p>
-                            <div className="flex flex-wrap justify-center gap-4">
-                                <Link
-                                    href="/register"
-                                    className="rounded-full bg-white px-10 py-5 text-xl font-bold text-indigo-600 transition-all hover:bg-slate-100 hover:scale-105 active:scale-95 shadow-xl shadow-white/10"
-                                >
-                                    {t('cta_button_primary')}
-                                </Link>
-                                <Link
-                                    href="/courses"
-                                    className="rounded-full border border-white/20 bg-white/5 backdrop-blur-sm px-10 py-5 text-xl font-bold text-white transition-all hover:bg-white/10 active:scale-95"
-                                >
-                                    {t('cta_button_secondary')}
-                                </Link>
-                            </div>
-                        </div>
-                    </section>
                 </main>
 
                 <Footer />

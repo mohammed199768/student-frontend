@@ -2,7 +2,7 @@
 
 import { Link } from '@/i18n/routing';
 import Image from 'next/image';
-import { Play, Star, Sparkles } from 'lucide-react';
+import { Play, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 
@@ -43,21 +43,11 @@ export function HeroSection() {
                         </span>
                     </motion.h1>
 
-                    {/* Subheadline */}
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="text-lg md:text-xl text-slate-400 mb-12 max-w-3xl mx-auto leading-relaxed"
-                    >
-                        {t('hero_subheadline')}
-                    </motion.p>
-
                     {/* CTA Buttons */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.3 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
                         className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto mb-16"
                     >
                         <Link
@@ -74,34 +64,6 @@ export function HeroSection() {
                             <Play className="w-5 h-5 ml-2 fill-current" />
                             {t('hero_cta_secondary')}
                         </Link>
-                    </motion.div>
-
-                    {/* Social Proof */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 1, delay: 0.5 }}
-                        className="flex items-center gap-6 text-sm text-slate-400 mb-20"
-                    >
-                        <div className="flex -space-x-3 rtl:space-x-reverse">
-                            {[1, 2, 3, 4, 5].map((i) => (
-                                <div key={i} className="w-8 h-8 rounded-full border-2 border-slate-900 bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold">
-                                    {String.fromCharCode(64 + i)}
-                                </div>
-                            ))}
-                        </div>
-                        <div className="flex items-center gap-1">
-                            <div className="flex text-amber-400">
-                                <Star className="w-4 h-4 fill-current" />
-                                <Star className="w-4 h-4 fill-current" />
-                                <Star className="w-4 h-4 fill-current" />
-                                <Star className="w-4 h-4 fill-current" />
-                                <Star className="w-4 h-4 fill-current" />
-                            </div>
-                            <span>
-                                <span className="font-bold text-white">4.9/5</span> {t('social_proof')}
-                            </span>
-                        </div>
                     </motion.div>
 
                     {/* Hero Visual - Dashboard Preview */}

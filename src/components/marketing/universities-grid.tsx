@@ -56,30 +56,30 @@ export function UniversitiesGrid() {
             className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
         >
             {universities.map(university => (
-                <motion.div variants={item} key={university.id} className="relative z-10">
+                <motion.div variants={item} key={university.id} className="relative z-10 h-full">
                     <Link
                         href={`/universities/${university.id}`}
-                        className="group relative flex flex-col items-center justify-center p-8 rounded-4xl bg-white/5 backdrop-blur-sm border border-white/10 transition-all hover:bg-white/10 hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-500/20"
+                        className="group relative grid h-[248px] grid-rows-[auto_1fr_auto] items-center justify-items-center rounded-4xl border border-white/10 bg-white/5 p-5 text-center transition-all hover:-translate-y-2 hover:bg-white/10 hover:shadow-2xl hover:shadow-indigo-500/20 sm:h-[264px] sm:p-6"
                     >
-                        <div className="relative w-20 h-20 mb-6 p-4 rounded-2xl bg-white/90 shadow-lg group-hover:scale-110 transition-transform duration-300 flex items-center justify-center">
+                        <div className="relative mb-4 flex h-28 w-28 items-center justify-center rounded-3xl bg-white/95 p-3 shadow-lg transition-transform duration-300 group-hover:scale-105 sm:mb-5 sm:h-32 sm:w-32">
                             {(university.logoUrl || university.logo) ? (
                                 <Image
                                     src={university.logoUrl || university.logo || ''}
                                     alt={university.name}
-                                    width={80}
-                                    height={80}
-                                    className="object-contain"
+                                    width={120}
+                                    height={120}
+                                    className="h-full w-full object-contain"
                                 />
                             ) : (
-                                <Building2 className="w-10 h-10 text-indigo-600" />
+                                <Building2 className="h-12 w-12 text-indigo-600" />
                             )}
                         </div>
 
-                        <h3 className="text-lg font-bold text-white text-center mb-2 group-hover:text-amber-400 transition-colors">
+                        <h3 className="mb-3 line-clamp-2 min-h-[3.5rem] text-base font-bold leading-7 text-white transition-colors group-hover:text-amber-400 sm:text-lg">
                             {university.name}
                         </h3>
 
-                        <span className="text-xs font-medium text-slate-400 group-hover:text-white transition-colors flex items-center gap-1">
+                        <span className="flex items-center gap-1 text-xs font-medium text-slate-400 transition-colors group-hover:text-white">
                             {t('universities_explore')} <ArrowRight className="w-3 h-3 group-hover:translate-x-[-4px] transition-transform rtl:group-hover:translate-x-[4px]" />
                         </span>
 
