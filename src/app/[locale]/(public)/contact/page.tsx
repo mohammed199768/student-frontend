@@ -7,9 +7,11 @@ import { Mail, Phone, Send } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { apiClient } from '@/lib/api/client';
+import { SUPPORT_EMAIL, SUPPORT_WHATSAPP_DISPLAY, buildWhatsAppUrl } from '@/lib/constants/support';
 
-const CONTACT_EMAIL = 't.manalalhihi@gmail.com';
-const CONTACT_PHONE = '+966502609789';
+const CONTACT_EMAIL = SUPPORT_EMAIL;
+const CONTACT_PHONE = SUPPORT_WHATSAPP_DISPLAY;
+const CONTACT_WHATSAPP_URL = buildWhatsAppUrl();
 
 type ContactFormState = {
     name: string;
@@ -82,7 +84,14 @@ export default function ContactPage() {
                                     </div>
                                     <div>
                                         <p className="text-xs font-bold uppercase tracking-wider text-indigo-300">{t('phone_label')}</p>
-                                        <p className="font-bold">{CONTACT_PHONE}</p>
+                                        <a
+                                            href={CONTACT_WHATSAPP_URL}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="font-bold underline underline-offset-2 hover:text-indigo-200 transition-colors"
+                                        >
+                                            {CONTACT_PHONE}
+                                        </a>
                                     </div>
                                 </div>
                             </div>

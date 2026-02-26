@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import { Navbar } from '@/components/common/navbar';
 import { Footer } from '@/components/common/footer';
 import { formatPrice } from '@/lib/utils';
+import { buildWhatsAppUrl } from '@/lib/constants/support';
 
 import { useTranslations } from 'next-intl';
 
@@ -84,10 +85,8 @@ export default function EnrollmentPage() {
 
     const handleWhatsAppRedirect = () => {
         if (!enrollmentData) return;
-        const phone = '963900000000'; // Replace with env var if available
         const message = t('whatsapp_message', { title: course?.title || '', id: enrollmentData.id });
-        
-        const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        const url = buildWhatsAppUrl(message);
         window.open(url, '_blank');
     };
 
