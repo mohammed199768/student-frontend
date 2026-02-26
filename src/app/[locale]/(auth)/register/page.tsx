@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Loader2, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -24,6 +24,7 @@ export default function RegisterPage() {
     const ct = useTranslations('common');
     const { login } = useAuth();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const submitLockRef = useRef(false);
     const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
 
@@ -44,6 +45,9 @@ export default function RegisterPage() {
     });
 
     const onSubmit = async (values: z.infer<typeof registerSchema>) => {
+        // Prevent duplicate concurrent submissions before React re-renders button disabled state.
+        if (submitLockRef.current) return;
+        submitLockRef.current = true;
         setIsSubmitting(true);
         try {
             await apiClient.post('/auth/register', values);
@@ -60,6 +64,7 @@ export default function RegisterPage() {
             toast.error(message);
         } finally {
             setIsSubmitting(false);
+            submitLockRef.current = false;
         }
     };
 

@@ -57,13 +57,17 @@ class ApiClient {
       (response) => response,
       async (error: AxiosError) => {
         const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+        const requestUrl = originalRequest?.url || '';
+        const isRefreshRequest = requestUrl.includes('/auth/refresh');
+        const isLoginRequest = requestUrl.includes('/auth/login');
 
         // Skip refresh logic for aborted requests
         if (axios.isCancel(error)) {
           return Promise.reject(error);
         }
 
-        if (error.response?.status === 401 && !originalRequest._retry && !originalRequest.url?.includes('auth/refresh')) {
+        // Do not refresh on login failures; invalid credentials should surface directly.
+        if (error.response?.status === 401 && !originalRequest._retry && !isRefreshRequest && !isLoginRequest) {
           logger.warn('401 received - checking refresh state', { url: originalRequest.url, isRefreshing: this.isRefreshing });
           
           if (this.isRefreshing) {
