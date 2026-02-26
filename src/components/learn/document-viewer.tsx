@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { Loader2, AlertTriangle, Maximize, Minimize, Plus, Minus } from 'lucide-react';
 import { apiClient } from '@/lib/api/client';
-import { useAuth } from '@/lib/contexts/auth-context';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
@@ -32,10 +31,8 @@ export function DocumentViewer({ lessonId, assetId, pageCount: initialPageCount,
     const [error, setError] = useState<string | null>(null);
     const [scale, setScale] = useState(1.0);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    
-    // SECURITY: Get token from AuthContext (in-memory storage)
-    const { getToken } = useAuth();
-    const token = getToken();
+    const [documentUrl, setDocumentUrl] = useState<string | null>(null);
+    const objectUrlRef = useRef<string | null>(null);
 
     function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
         setNumPages(numPages);
@@ -48,22 +45,59 @@ export function DocumentViewer({ lessonId, assetId, pageCount: initialPageCount,
         setIsLoading(false);
     }
 
-    const [cacheBuster] = useState(() => Date.now()); // Phase 10-UX: Stable Cache Key
+    useEffect(() => {
+        let isMounted = true;
 
-    /**
-     * SECURITY: File configuration with Authorization header
-     * Token is passed in httpHeaders, NOT in URL query parameters
-     */
-    const file = useMemo(() => {
-        if (!token || !assetId) return null;
-        return {
-            url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/lessons/assets/${assetId}/document/stream?v=${cacheBuster}`,
-            httpHeaders: {
-                'Authorization': `Bearer ${token}`
-            },
-            withCredentials: true
+        const loadSecureDocument = async () => {
+            if (!assetId) {
+                setError('Document not found.');
+                setIsLoading(false);
+                return;
+            }
+
+            setIsLoading(true);
+            setError(null);
+            setNumPages(initialPageCount || null);
+
+            try {
+                const blob = await apiClient.getBlob(
+                    `/lessons/assets/${assetId}/document/stream?v=${Date.now()}`
+                );
+
+                if (!isMounted) return;
+
+                if (blob.type && blob.type !== 'application/pdf' && blob.type !== 'application/octet-stream') {
+                    throw new Error(`Unexpected content type: ${blob.type}`);
+                }
+
+                if (objectUrlRef.current) {
+                    URL.revokeObjectURL(objectUrlRef.current);
+                }
+
+                const nextUrl = URL.createObjectURL(blob);
+                objectUrlRef.current = nextUrl;
+
+                setDocumentUrl(nextUrl);
+            } catch (err) {
+                console.error('Secure PDF Fetch Error:', err);
+                if (isMounted) {
+                    setDocumentUrl(null);
+                    setError('Failed to load document.');
+                    setIsLoading(false);
+                }
+            }
         };
-    }, [token, assetId, cacheBuster]);
+
+        loadSecureDocument();
+
+        return () => {
+            isMounted = false;
+            if (objectUrlRef.current) {
+                URL.revokeObjectURL(objectUrlRef.current);
+                objectUrlRef.current = null;
+            }
+        };
+    }, [assetId, initialPageCount]);
 
     const toggleFullscreen = () => {
         setIsFullscreen(!isFullscreen);
@@ -188,9 +222,9 @@ export function DocumentViewer({ lessonId, assetId, pageCount: initialPageCount,
                      </div>
                  ) : (
                      <div className="inline-block shadow-2xl">
-                         {file ? (
+                         {documentUrl ? (
                              <Document
-                                file={file}
+                                file={documentUrl}
                                 onLoadSuccess={onDocumentLoadSuccess}
                                 onLoadError={onDocumentLoadError}
                                 loading={null}
@@ -202,7 +236,7 @@ export function DocumentViewer({ lessonId, assetId, pageCount: initialPageCount,
                                 ))}
                              </Document>
                          ) : (
-                             <p className="text-white">Authentication required</p>
+                             <p className="text-white">Loading secure document...</p>
                          )}
                      </div>
                  )}

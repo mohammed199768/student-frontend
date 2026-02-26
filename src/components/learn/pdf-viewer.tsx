@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLessonProgress } from '@/lib/api/hooks/use-progress';
 import { DocumentViewer } from './document-viewer';
 import { Loader2, AlertTriangle } from 'lucide-react';
-import { toast } from 'react-hot-toast';
 import { apiClient } from '@/lib/api/client';
 
 interface PdfViewerProps {
@@ -36,23 +35,39 @@ export function PdfViewer({ lessonId, assetId }: PdfViewerProps) {
         });
     }, [lessonId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // Fetch document metadata
-    useEffect(() => {
-        const fetchMetadata = async () => {
-            try {
+    const fetchMetadata = useCallback(async (silent = false) => {
+        try {
+            if (!silent) {
                 setLoading(true);
-                const response = await apiClient.get<{ data: DocumentMetadata }>(`/lessons/assets/${assetId}/document/metadata?t=${Date.now()}`);
-                setMetadata(response.data.data);
-            } catch (err) {
-                console.error(err);
-                setError('Failed to load document.'); 
-            } finally {
+            }
+            const response = await apiClient.get<{ data: DocumentMetadata }>(`/lessons/assets/${assetId}/document/metadata?t=${Date.now()}`);
+            setMetadata(response.data.data);
+            setError(null);
+        } catch (err) {
+            console.error(err);
+            setError('Failed to load document.');
+        } finally {
+            if (!silent) {
                 setLoading(false);
             }
-        };
+        }
+    }, [assetId]);
 
-        fetchMetadata();
-    }, [lessonId, assetId]);
+    // Initial metadata load
+    useEffect(() => {
+        fetchMetadata(false);
+    }, [fetchMetadata, lessonId]);
+
+    // Poll while processing so UI auto-updates when worker finishes
+    useEffect(() => {
+        if (!metadata || metadata.renderStatus === 'COMPLETED' || metadata.renderStatus === 'FAILED') return;
+
+        const interval = setInterval(() => {
+            fetchMetadata(true);
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, [metadata, fetchMetadata]);
 
 
     if (loading) {
@@ -72,6 +87,20 @@ export function PdfViewer({ lessonId, assetId }: PdfViewerProps) {
                 <div className="flex flex-col items-center gap-2 text-red-400">
                     <AlertTriangle className="h-8 w-8" />
                     <p>{error || 'Document not found'}</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (metadata.renderStatus === 'FAILED') {
+        return (
+            <div className="h-full bg-slate-900 rounded-3xl flex items-center justify-center text-white">
+                <div className="flex flex-col items-center gap-4 max-w-md text-center p-6">
+                    <AlertTriangle className="h-10 w-10 text-red-500" />
+                    <h3 className="font-bold text-lg">Document processing failed</h3>
+                    <p className="text-slate-400 text-sm">
+                        This file could not be converted to secure PDF. Please ask support to re-upload it.
+                    </p>
                 </div>
             </div>
         );
