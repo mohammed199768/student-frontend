@@ -2,24 +2,41 @@ import { Link } from '@/i18n/routing';
 import { Navbar } from '@/components/common/navbar';
 import { Footer } from '@/components/common/footer';
 import { CourseCard } from '@/components/courses/course-card';
-import { apiClient } from '@/lib/api/client';
 import { Course } from '@/lib/api/types';
 import { ArrowRight, BookOpen } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { UniversitiesGrid } from '@/components/marketing/universities-grid';
 
+const PUBLIC_API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/+$/, '');
+
 async function getFeaturedCourses(): Promise<Course[]> {
     try {
+        if (!PUBLIC_API_BASE_URL) {
+            throw new Error('NEXT_PUBLIC_API_BASE_URL is not defined');
+        }
+
         // 1. Try fetching featured courses
-        const { data } = await apiClient.get('/catalog/courses?isFeatured=true&limit=4');
-        if (data.data.courses?.length > 0) {
-            return data.data.courses;
+        const featuredRes = await fetch(`${PUBLIC_API_BASE_URL}/catalog/courses?isFeatured=true&limit=4`, {
+            next: { revalidate: 60 },
+        });
+        if (!featuredRes.ok) {
+            throw new Error('Failed to fetch featured courses');
+        }
+        const featuredJson = await featuredRes.json();
+        if (featuredJson.data?.courses?.length > 0) {
+            return featuredJson.data.courses;
         }
 
         // 2. Fallback: Fetch any 4 newest courses
-        const { data: fallbackData } = await apiClient.get('/catalog/courses?limit=4&sort=latest');
-        return fallbackData.data.courses || [];
+        const latestRes = await fetch(`${PUBLIC_API_BASE_URL}/catalog/courses?limit=4&sort=latest`, {
+            next: { revalidate: 60 },
+        });
+        if (!latestRes.ok) {
+            throw new Error('Failed to fetch latest courses');
+        }
+        const latestJson = await latestRes.json();
+        return latestJson.data?.courses || [];
     } catch (error) {
         console.error('Failed to fetch featured courses', error);
         return [];

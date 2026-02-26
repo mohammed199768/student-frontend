@@ -1,7 +1,6 @@
 import { Navbar } from '@/components/common/navbar';
 import { Footer } from '@/components/common/footer';
 import { CourseCard } from '@/components/courses/course-card';
-import { apiClient } from '@/lib/api/client';
 import { Course, University } from '@/lib/api/types';
 import { Link } from '@/i18n/routing';
 import { Search } from 'lucide-react';
@@ -13,26 +12,42 @@ interface CoursesPageProps {
     }>;
 }
 
+const PUBLIC_API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/+$/, '');
+
 async function getData(universityId?: string) {
     try {
+        if (!PUBLIC_API_BASE_URL) {
+            throw new Error('NEXT_PUBLIC_API_BASE_URL is not defined');
+        }
+
+        const coursesQuery = universityId ? `?universityId=${encodeURIComponent(universityId)}` : '';
         const [universitiesRes, coursesRes] = await Promise.all([
-            apiClient.get('/catalog/universities'),
-            apiClient.get('/catalog/courses', {
-                params: universityId ? { universityId } : {},
+            fetch(`${PUBLIC_API_BASE_URL}/catalog/universities`, {
+                next: { revalidate: 60 },
+            }),
+            fetch(`${PUBLIC_API_BASE_URL}/catalog/courses${coursesQuery}`, {
+                next: { revalidate: 60 },
             }),
         ]);
 
+        if (!universitiesRes.ok || !coursesRes.ok) {
+            throw new Error('Failed to fetch courses page data');
+        }
+
+        const [universitiesJson, coursesJson] = await Promise.all([
+            universitiesRes.json(),
+            coursesRes.json(),
+        ]);
+
         return {
-            universities: (universitiesRes.data.data as University[]) || [],
-            courses: (coursesRes.data.data.courses as Course[]) || []
+            universities: (universitiesJson.data as University[]) || [],
+            courses: (coursesJson.data?.courses as Course[]) || []
         };
     } catch (error) {
         console.error('Failed to fetch data', error);
         return { universities: [], courses: [] };
     }
 }
-
-export const dynamic = 'force-dynamic';
 
 export default async function CoursesPage({ searchParams }: CoursesPageProps) {
     const { universityId } = await searchParams;

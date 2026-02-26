@@ -15,27 +15,62 @@ import {
     Menu,
     X,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+
+const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
+
+const detectSafari = () => {
+    if (typeof navigator === 'undefined') return false;
+    const userAgent = navigator.userAgent;
+    return /Safari/i.test(userAgent) && !/Chrome|Chromium|CriOS|Edg|OPR|OPiOS|FxiOS/i.test(userAgent);
+};
+
+const detectReducedMotion = () => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia(REDUCED_MOTION_QUERY).matches;
+};
 
 export function Navbar() {
     const t = useTranslations('common');
     const { user, logout } = useAuth();
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [isMobileMoreOpen, setIsMobileMoreOpen] = useState(false);
+    const [prefersReducedMotion, setPrefersReducedMotion] = useState(detectReducedMotion);
     const pathname = usePathname();
     const locale = useLocale();
     const router = useRouter();
+    const isSafari = detectSafari();
+
+    useEffect(() => {
+        const motionMedia = window.matchMedia(REDUCED_MOTION_QUERY);
+        const updateMotionPreference = (event: MediaQueryListEvent | MediaQueryList) => setPrefersReducedMotion(event.matches);
+
+        if (typeof motionMedia.addEventListener === 'function') {
+            motionMedia.addEventListener('change', updateMotionPreference);
+        } else {
+            motionMedia.addListener(updateMotionPreference);
+        }
+
+        return () => {
+            if (typeof motionMedia.removeEventListener === 'function') {
+                motionMedia.removeEventListener('change', updateMotionPreference);
+            } else {
+                motionMedia.removeListener(updateMotionPreference);
+            }
+        };
+    }, []);
 
     const scrollToHero = () => {
         if (typeof window === 'undefined') return;
         const heroSection = document.getElementById('hero-section');
+        const behavior: ScrollBehavior = prefersReducedMotion ? 'auto' : 'smooth';
         if (heroSection) {
-            heroSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            heroSection.scrollIntoView({ behavior, block: 'start' });
             return;
         }
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior });
     };
 
     const toggleLanguage = () => {
@@ -65,7 +100,12 @@ export function Navbar() {
     return (
         <>
             {/* Desktop Navbar Only */}
-            <nav className="sticky top-0 z-50 hidden w-full border-b border-white/5 bg-slate-900/80 backdrop-blur-md md:block">
+            <nav
+                className={cn(
+                    'sticky top-0 z-50 hidden w-full border-b border-white/5 md:block',
+                    isSafari ? 'bg-slate-900/95' : 'bg-slate-900/80 backdrop-blur-sm'
+                )}
+            >
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 items-center justify-between">
                         <div className="flex items-center">
@@ -275,7 +315,8 @@ export function Navbar() {
                             }
                         }}
                         className={cn(
-                            'group relative -mt-9 flex h-16 w-16 items-center justify-center self-start justify-self-center rounded-full border border-white/25 bg-linear-to-b from-indigo-500 to-indigo-700 shadow-xl shadow-indigo-900/70 transition-all active:scale-90',
+                            'group relative -mt-9 flex h-16 w-16 items-center justify-center self-start justify-self-center rounded-full border border-white/25 bg-linear-to-b from-indigo-500 to-indigo-700 shadow-xl shadow-indigo-900/70',
+                            prefersReducedMotion ? 'transition-none' : 'transition-all active:scale-90',
                             pathname === '/' && 'ring-2 ring-indigo-300/40 ring-offset-2 ring-offset-slate-900'
                         )}
                     >
@@ -286,7 +327,14 @@ export function Navbar() {
                             height={30}
                             className="rounded-full object-cover"
                         />
-                        <span className="pointer-events-none absolute inset-0 rounded-full border border-indigo-200/40 transition-all duration-150 group-active:scale-110 group-active:opacity-0" />
+                        <span
+                            className={cn(
+                                'pointer-events-none absolute inset-0 rounded-full border border-indigo-200/40',
+                                prefersReducedMotion
+                                    ? 'transition-none'
+                                    : 'transition-all duration-150 group-active:scale-110 group-active:opacity-0'
+                            )}
+                        />
                     </Link>
 
                     {(() => {

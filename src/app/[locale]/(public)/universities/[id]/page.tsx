@@ -16,7 +16,7 @@ export default async function UniversityPage({ params }: UniversityPageProps) {
     let university;
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/catalog/universities/${id}`, {
-            cache: 'no-store'
+            next: { revalidate: 60 }
         });
 
         if (!res.ok) {

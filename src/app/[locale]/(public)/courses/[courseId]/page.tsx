@@ -22,7 +22,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
     let course;
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/catalog/courses/${courseId}`, {
-            cache: 'no-store', // Always fetch fresh data
+            next: { revalidate: 60 },
         });
 
         if (!res.ok) {
