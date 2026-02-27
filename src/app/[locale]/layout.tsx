@@ -10,7 +10,7 @@ import { Toaster } from 'react-hot-toast';
 import { PwaRegister } from '@/components/common/pwa-register';
 import '@/app/globals.css';
 
-export const metadata: Metadata = {
+const metadataBaseConfig: Metadata = {
     metadataBase: new URL('https://www.manalalhihi.com'),
     title: {
         default: 'T.MANAL ALHIHI',
@@ -23,14 +23,6 @@ export const metadata: Metadata = {
     publisher: 'INKSPIRE',
     keywords: ['T.MANAL LMS', 'T.MANAL ALHIHI', 'INKSPIRE', 'T.MANL ALHIHI', 'Educational Platform', 'Online Learning', 'LMS'],
     manifest: '/manifest.webmanifest',
-    alternates: {
-        canonical: 'https://www.manalalhihi.com',
-        languages: {
-            ar: 'https://www.manalalhihi.com/ar',
-            en: 'https://www.manalalhihi.com/en',
-            'x-default': 'https://www.manalalhihi.com',
-        },
-    },
     robots: {
         index: true,
         follow: true,
@@ -75,6 +67,27 @@ export const metadata: Metadata = {
         apple: '/favicon.webp',
     },
 };
+
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+    const { locale } = await params;
+    const canonicalLocale = locale === 'ar' ? 'ar' : 'en';
+
+    return {
+        ...metadataBaseConfig,
+        alternates: {
+            canonical: `https://www.manalalhihi.com/${canonicalLocale}`,
+            languages: {
+                ar: 'https://www.manalalhihi.com/ar',
+                en: 'https://www.manalalhihi.com/en',
+                'x-default': 'https://www.manalalhihi.com',
+            },
+        },
+    };
+}
 
 export const viewport: Viewport = {
     width: 'device-width',
