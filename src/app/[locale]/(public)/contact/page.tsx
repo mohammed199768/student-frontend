@@ -58,13 +58,13 @@ export default function ContactPage() {
     };
 
     return (
-        <div className="flex min-h-screen flex-col bg-slate-50">
+        <div className="flex min-h-screen flex-col bg-slate-50 dark:bg-slate-950">
             <Navbar />
 
             <main className="flex-1 py-24">
                 <div className="container mx-auto px-4">
-                    <div className="mx-auto flex max-w-5xl flex-col overflow-hidden rounded-[40px] border border-slate-100 bg-white shadow-2xl md:flex-row">
-                        <div className="p-12 text-white md:w-2/5 bg-indigo-600">
+                    <div className="mx-auto flex max-w-5xl flex-col overflow-hidden rounded-[40px] border border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-2xl md:flex-row">
+                        <div className="bg-indigo-600 p-12 text-white md:w-2/5">
                             <h2 className="mb-8 text-3xl font-extrabold">{t('title')}</h2>
                             <p className="mb-12 text-indigo-100">{t('description')}</p>
 
@@ -101,44 +101,44 @@ export default function ContactPage() {
                             <form className="space-y-6" onSubmit={handleSubmit}>
                                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                                     <div>
-                                        <label className="mb-2 block text-sm font-bold text-slate-700">{t('form_name')}</label>
+                                        <label className="mb-2 block text-sm font-bold text-slate-700 dark:text-slate-200">{t('form_name')}</label>
                                         <input
                                             type="text"
                                             value={form.name}
                                             onChange={(e) => onChange('name', e.target.value)}
                                             required
-                                            className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 focus:border-indigo-600 focus:outline-none"
+                                            className="w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700 px-4 py-3 text-slate-900 dark:text-white focus:border-indigo-600 focus:outline-none"
                                         />
                                     </div>
                                     <div>
-                                        <label className="mb-2 block text-sm font-bold text-slate-700">{t('form_email')}</label>
+                                        <label className="mb-2 block text-sm font-bold text-slate-700 dark:text-slate-200">{t('form_email')}</label>
                                         <input
                                             type="email"
                                             value={form.email}
                                             onChange={(e) => onChange('email', e.target.value)}
                                             required
-                                            className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 focus:border-indigo-600 focus:outline-none"
+                                            className="w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700 px-4 py-3 text-slate-900 dark:text-white focus:border-indigo-600 focus:outline-none"
                                         />
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="mb-2 block text-sm font-bold text-slate-700">{t('form_subject')}</label>
+                                    <label className="mb-2 block text-sm font-bold text-slate-700 dark:text-slate-200">{t('form_subject')}</label>
                                     <input
                                         type="text"
                                         value={form.subject}
                                         onChange={(e) => onChange('subject', e.target.value)}
                                         required
-                                        className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 focus:border-indigo-600 focus:outline-none"
+                                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700 px-4 py-3 text-slate-900 dark:text-white focus:border-indigo-600 focus:outline-none"
                                     />
                                 </div>
                                 <div>
-                                    <label className="mb-2 block text-sm font-bold text-slate-700">{t('form_message')}</label>
+                                    <label className="mb-2 block text-sm font-bold text-slate-700 dark:text-slate-200">{t('form_message')}</label>
                                     <textarea
                                         rows={5}
                                         value={form.message}
                                         onChange={(e) => onChange('message', e.target.value)}
                                         required
-                                        className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 focus:border-indigo-600 focus:outline-none"
+                                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700 px-4 py-3 text-slate-900 dark:text-white focus:border-indigo-600 focus:outline-none"
                                     />
                                 </div>
                                 <button

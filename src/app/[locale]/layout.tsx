@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { AuthProvider } from '@/lib/contexts/auth-context';
 import { QueryProvider } from '@/components/providers/query-provider';
+import { ThemeProvider } from '@/components/providers/theme-provider';
 import { Toaster } from 'react-hot-toast';
 import { PwaRegister } from '@/components/common/pwa-register';
 import '@/app/globals.css';
@@ -73,7 +74,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1,
-    themeColor: '#0f172a',
+    themeColor: 'var(--bg-base)',
     colorScheme: 'light dark',
 };
 
@@ -95,19 +96,28 @@ export default async function LocaleLayout({
 
     return (
         <html lang={locale} dir={dir} className="h-full" suppressHydrationWarning>
+            <head>
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `(function(){try{var t=localStorage.getItem('manal-theme')||'dark';document.documentElement.classList.add(t);}catch(e){}})();`,
+                    }}
+                />
+            </head>
             <body
                 className="font-sans antialiased h-full bg-slate-50 text-slate-900"
                 suppressHydrationWarning
             >
-                <NextIntlClientProvider messages={messages} locale={locale}>
-                    <QueryProvider>
-                        <AuthProvider>
-                            {children}
-                            <Toaster position="top-center" />
-                            <PwaRegister />
-                        </AuthProvider>
-                    </QueryProvider>
-                </NextIntlClientProvider>
+                <ThemeProvider>
+                    <NextIntlClientProvider messages={messages} locale={locale}>
+                        <QueryProvider>
+                            <AuthProvider>
+                                {children}
+                                <Toaster position="top-center" />
+                                <PwaRegister />
+                            </AuthProvider>
+                        </QueryProvider>
+                    </NextIntlClientProvider>
+                </ThemeProvider>
             </body>
         </html>
     );

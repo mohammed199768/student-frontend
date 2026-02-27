@@ -14,12 +14,12 @@ export function CourseCard({ course, variant = 'light' }: CourseCardProps) {
     
     // Formatting helpers
     const isDark = variant === 'dark';
-    const bgClass = isDark ? "bg-white/5 border-white/10 hover:bg-white/10" : "bg-white border-slate-200 hover:-translate-y-1";
+    const bgClass = isDark ? "bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/10" : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:-translate-y-1";
 
-    const textSub = isDark ? "text-slate-400" : "text-slate-500";
-    const priceColor = isDark ? "text-white" : "text-slate-900";
-    const pillClass = isDark ? "bg-white/10 text-indigo-200" : "bg-indigo-50 text-indigo-700";
-    const borderClass = isDark ? "border-white/10" : "border-slate-100";
+    const textSub = isDark ? "text-slate-500 dark:text-slate-400" : "text-slate-500 dark:text-slate-400";
+    const priceColor = isDark ? "text-slate-900 dark:text-white" : "text-slate-900 dark:text-white";
+    const pillClass = isDark ? "bg-indigo-100 dark:bg-white/10 text-indigo-700 dark:text-indigo-200" : "bg-indigo-50 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-200";
+    const borderClass = isDark ? "border-slate-200 dark:border-white/10" : "border-slate-100 dark:border-slate-700";
     const btnClass = isDark ? "bg-indigo-600 hover:bg-indigo-500" : "bg-slate-900 hover:bg-indigo-600";
 
     return (
@@ -60,7 +60,7 @@ export function CourseCard({ course, variant = 'light' }: CourseCardProps) {
                         <div className="flex flex-col">
                             {course.salePrice ? (
                                 <>
-                                    <span className="text-xs text-slate-500 line-through">{formatPrice(course.price)}</span>
+                                    <span className="text-xs text-slate-500 dark:text-slate-400 line-through">{formatPrice(course.price)}</span>
                                     <span className={`text-lg font-bold ${priceColor}`}>{formatPrice(course.salePrice)}</span>
                                 </>
                             ) : (

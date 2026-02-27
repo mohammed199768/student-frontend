@@ -18,6 +18,7 @@ import {
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { ThemeToggle } from '@/components/layout/theme-toggle';
 
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
@@ -90,8 +91,8 @@ export function Navbar() {
             {/* Desktop Navbar Only */}
             <nav
                 className={cn(
-                    'sticky top-0 z-50 hidden w-full border-b border-white/5 md:block',
-                    isSafari ? 'bg-slate-900/95' : 'bg-slate-900/80 backdrop-blur-sm'
+                    'sticky top-0 z-50 hidden w-full border-b border-slate-100 dark:border-white/5 md:block',
+                    isSafari ? 'bg-white/95 dark:bg-slate-900/95' : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm'
                 )}
             >
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -115,7 +116,7 @@ export function Navbar() {
                                     href={link.href}
                                     className={cn(
                                         'text-sm font-medium transition-all duration-200 hover:text-indigo-400 hover:scale-105',
-                                        pathname === link.href ? 'text-indigo-400 font-bold' : 'text-slate-300'
+                                        pathname === link.href ? 'text-indigo-400 font-bold' : 'text-slate-600 dark:text-slate-300'
                                     )}
                                 >
                                     {link.label}
@@ -124,9 +125,10 @@ export function Navbar() {
                         </div>
 
                         <div className="flex items-center gap-4">
+                            <ThemeToggle />
                             <button
                                 onClick={toggleLanguage}
-                                className="rounded-xl px-3 py-2 text-slate-300 transition-all hover:bg-white/10 hover:text-indigo-400"
+                                className="rounded-xl px-3 py-2 text-slate-600 dark:text-slate-300 transition-all hover:bg-slate-100 dark:hover:bg-white/10 hover:text-indigo-400"
                             >
                                 <Languages className="h-5 w-5" />
                             </button>
@@ -135,7 +137,7 @@ export function Navbar() {
                                 <div className="flex items-center gap-4">
                                     <Link
                                         href="/dashboard"
-                                        className="flex items-center gap-2 text-sm font-medium text-slate-300 hover:text-indigo-400"
+                                        className="flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-400"
                                     >
                                         <LayoutDashboard className="h-4 w-4" />
                                         <span>{t('dashboard')}</span>
@@ -143,20 +145,20 @@ export function Navbar() {
                                     <div className="relative">
                                         <button
                                             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                                            className="flex items-center gap-2 rounded-full border border-white/10 p-1 pr-3 hover:bg-white/5 rtl:pl-3 rtl:pr-1 transition-colors"
+                                            className="flex items-center gap-2 rounded-full border border-slate-200 dark:border-white/10 p-1 pr-3 hover:bg-slate-100 dark:hover:bg-white/5 rtl:pl-3 rtl:pr-1 transition-colors"
                                         >
                                             <div className="h-8 w-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-300">
                                                 <User className="h-5 w-5" />
                                             </div>
-                                            <span className="text-sm font-medium text-slate-200 hidden sm:inline-block">
+                                            <span className="text-sm font-medium text-slate-700 dark:text-slate-200 hidden sm:inline-block">
                                                 {user.fullName?.split(' ')[0] || ''}
                                             </span>
                                         </button>
                                         {isUserMenuOpen && (
-                                            <div className="absolute left-0 mt-2 w-48 rounded-xl border border-white/10 bg-slate-900 p-2 shadow-xl rtl:left-auto rtl:right-0">
+                                            <div className="absolute left-0 mt-2 w-48 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 p-2 shadow-xl rtl:left-auto rtl:right-0">
                                                 <Link
                                                     href="/profile"
-                                                    className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-indigo-400"
+                                                    className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-indigo-400"
                                                 >
                                                     <User className="h-4 w-4" />
                                                     <span>{t('profile')}</span>
@@ -173,14 +175,14 @@ export function Navbar() {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="inline-flex items-center rounded-full border border-white/10 bg-white/5 p-1">
+                                <div className="inline-flex items-center rounded-full border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 p-1">
                                     <Link
                                         href="/login"
                                         className={cn(
                                             'inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all',
                                             pathname === '/login'
                                                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
-                                                : 'text-slate-300 hover:bg-white/5 hover:text-indigo-300'
+                                                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/5 hover:text-indigo-300'
                                         )}
                                     >
                                         <LogIn className="h-4 w-4" />
@@ -192,7 +194,7 @@ export function Navbar() {
                                             'inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all',
                                             pathname === '/register'
                                                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
-                                                : 'text-slate-300 hover:bg-white/5 hover:text-indigo-300'
+                                                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/5 hover:text-indigo-300'
                                         )}
                                     >
                                         <UserPlus className="h-4 w-4" />
@@ -207,9 +209,9 @@ export function Navbar() {
 
             {/* Mobile More Sheet */}
             {isMobileMoreOpen && (
-                <div className="fixed inset-x-3 bottom-[5.7rem] z-50 rounded-[1.6rem] border border-white/10 bg-slate-900/98 p-3 shadow-2xl shadow-black/40 md:hidden">
+                <div className="fixed inset-x-3 bottom-[5.7rem] z-50 rounded-[1.6rem] border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/95 p-3 shadow-2xl shadow-black/40 md:hidden">
                     <div className="grid grid-cols-2 gap-2">
-                        <div className="col-span-2 inline-flex items-center rounded-xl border border-white/10 bg-white/5 p-1">
+                        <div className="col-span-2 inline-flex items-center rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 p-1">
                             <Link
                                 href="/login"
                                 onClick={() => setIsMobileMoreOpen(false)}
@@ -217,7 +219,7 @@ export function Navbar() {
                                     'flex-1 rounded-lg px-3 py-2.5 text-center text-sm font-semibold transition-all',
                                     pathname === '/login'
                                         ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
-                                        : 'text-slate-200 hover:bg-white/10'
+                                        : 'text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-white/10'
                                 )}
                             >
                                 <span className="inline-flex items-center gap-1.5">
@@ -232,7 +234,7 @@ export function Navbar() {
                                     'flex-1 rounded-lg px-3 py-2.5 text-center text-sm font-semibold transition-all',
                                     pathname === '/register'
                                         ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
-                                        : 'text-slate-200 hover:bg-white/10'
+                                        : 'text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-white/10'
                                 )}
                             >
                                 <span className="inline-flex items-center gap-1.5">
@@ -246,7 +248,7 @@ export function Navbar() {
             )}
 
             {/* Mobile Bottom Navigation Only */}
-            <nav className="fixed inset-x-3 bottom-3 z-50 isolate rounded-[2rem] border border-white/10 bg-slate-900/98 px-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] pt-2 shadow-2xl shadow-black/40 md:hidden">
+            <nav className="fixed inset-x-3 bottom-3 z-50 isolate rounded-[2rem] border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/95 px-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] pt-2 shadow-2xl shadow-black/40 md:hidden">
                 <div className="grid grid-cols-5 gap-1">
                     <Link
                         href="/courses"
@@ -254,7 +256,7 @@ export function Navbar() {
                             'flex flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-medium transition-colors',
                             pathname === '/courses' || pathname.startsWith('/courses/')
                                 ? 'bg-indigo-500/20 text-indigo-300'
-                                : 'text-slate-300 hover:bg-white/5'
+                                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'
                         )}
                     >
                         <BookOpen className="h-4 w-4" />
@@ -267,7 +269,7 @@ export function Navbar() {
                             'flex flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-medium transition-colors',
                             pathname === '/contact' || pathname.startsWith('/contact/')
                                 ? 'bg-indigo-500/20 text-indigo-300'
-                                : 'text-slate-300 hover:bg-white/5'
+                                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'
                         )}
                     >
                         <MessageCircle className="h-4 w-4" />
@@ -284,12 +286,12 @@ export function Navbar() {
                                 scrollToHero();
                             }
                         }}
-                        className={cn(
-                            'group relative -mt-9 flex h-16 w-16 items-center justify-center self-start justify-self-center rounded-full border border-white/25 bg-linear-to-b from-indigo-500 to-indigo-700 shadow-xl shadow-indigo-900/70',
-                            prefersReducedMotion ? 'transition-none' : 'transition-all active:scale-90',
-                            pathname === '/' && 'ring-2 ring-indigo-300/40 ring-offset-2 ring-offset-slate-900'
-                        )}
-                    >
+                            className={cn(
+                                'group relative -mt-9 flex h-16 w-16 items-center justify-center self-start justify-self-center rounded-full border border-white/25 bg-linear-to-b from-indigo-500 to-indigo-700 shadow-xl shadow-indigo-900/70',
+                                prefersReducedMotion ? 'transition-none' : 'transition-all active:scale-90',
+                                pathname === '/' && 'ring-2 ring-indigo-300/40 ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-900'
+                            )}
+                        >
                         <Image
                             src="/favicon.webp"
                             alt="Manal"
@@ -309,7 +311,7 @@ export function Navbar() {
 
                     <button
                         onClick={toggleLanguage}
-                        className="flex flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-medium text-slate-300 transition-colors hover:bg-white/5"
+                        className="flex flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-medium text-slate-600 dark:text-slate-300 transition-colors hover:bg-slate-100 dark:hover:bg-white/5"
                     >
                         <Languages className="h-4 w-4" />
                         <span className="line-clamp-1">{locale === 'ar' ? 'English' : 'Arabic'}</span>
@@ -319,7 +321,7 @@ export function Navbar() {
                         onClick={() => setIsMobileMoreOpen((prev) => !prev)}
                         className={cn(
                             'flex flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-medium transition-colors',
-                            isMobileMoreOpen ? 'bg-indigo-500/20 text-indigo-300' : 'text-slate-300 hover:bg-white/5'
+                            isMobileMoreOpen ? 'bg-indigo-500/20 text-indigo-300' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'
                         )}
                     >
                         {isMobileMoreOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}

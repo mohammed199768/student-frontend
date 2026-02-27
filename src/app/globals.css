@@ -1,4 +1,50 @@
+/* ================================================
+   THEME TOKENS — Do not edit values individually.
+   All theme colors are controlled from here.
+   ================================================ */
+
+:root {
+  --bg-base:        #ffffff;
+  --bg-surface:     #f8fafc;
+  --bg-card:        #ffffff;
+  --bg-muted:       #f1f5f9;
+  --bg-overlay:     rgba(255, 255, 255, 0.8);
+
+  --text-base:      #0f172a;
+  --text-muted:     #64748b;
+  --text-subtle:    #94a3b8;
+
+  --brand:          #4f46e5;
+  --brand-hover:    #4338ca;
+
+  --border:         #e2e8f0;
+  --border-subtle:  #f1f5f9;
+
+  --success:        #22c55e;
+  --error:          #ef4444;
+  --warning:        #f59e0b;
+}
+
+.dark {
+  --bg-base:        #0f172a;
+  --bg-surface:     #1e293b;
+  --bg-card:        #1e293b;
+  --bg-muted:       #334155;
+  --bg-overlay:     rgba(15, 23, 42, 0.8);
+
+  --text-base:      #f8fafc;
+  --text-muted:     #94a3b8;
+  --text-subtle:    #64748b;
+
+  --brand:          #818cf8;
+  --brand-hover:    #6366f1;
+
+  --border:         #334155;
+  --border-subtle:  #1e293b;
+}
+
 @import "tailwindcss";
+@config "../../tailwind.config.ts";
 
 :root {
   --background: #ffffff;
@@ -19,6 +65,16 @@
   }
 }
 
+:root {
+  --background: var(--bg-base);
+  --foreground: var(--text-base);
+}
+
+.dark {
+  --background: var(--bg-base);
+  --foreground: var(--text-base);
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -26,6 +82,14 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body.bg-slate-50 {
+  background: var(--bg-base);
+}
+
+body.text-slate-900 {
+  color: var(--text-base);
 }
 
 :focus-visible {

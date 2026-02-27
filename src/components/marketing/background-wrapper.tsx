@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
 
 const MOBILE_BREAKPOINT = 768;
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
@@ -26,7 +27,15 @@ export function BackgroundWrapper() {
     const [particles, setParticles] = useState<Array<{ w: number, h: number, top: number, left: number, duration: number, delay: number }>>([]);
     const [isMobile, setIsMobile] = useState(detectMobile);
     const [prefersReducedMotion, setPrefersReducedMotion] = useState(detectReducedMotion);
+    const [mounted, setMounted] = useState(false);
+    const { resolvedTheme } = useTheme();
     const isSafari = detectSafari();
+    const isDark = !mounted || resolvedTheme === 'dark';
+    const backgroundClass = isDark
+        ? 'bg-linear-to-br from-slate-900 via-slate-900 to-slate-900'
+        : 'bg-linear-to-br from-white via-indigo-50/30 to-slate-50';
+
+    useEffect(() => setMounted(true), []);
 
     useEffect(() => {
         const motionMedia = window.matchMedia(REDUCED_MOTION_QUERY);
@@ -70,18 +79,18 @@ export function BackgroundWrapper() {
     const blobAnimationClass = prefersReducedMotion ? '' : 'animate-blob';
 
     return (
-        <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-slate-900">
+        <div className={`fixed inset-0 z-0 pointer-events-none overflow-hidden ${backgroundClass}`}>
             {/* Background Gradients & Effects */}
             <div className={`absolute top-0 right-0 -translate-y-12 translate-x-12 h-[600px] w-[600px] rounded-full bg-indigo-600/20 blur-[48px] opacity-40 ${blendClass} ${blobAnimationClass}`.trim()}></div>
             <div className={`absolute bottom-0 left-0 -translate-x-12 translate-y-24 h-[600px] w-[600px] rounded-full bg-purple-600/20 blur-[48px] opacity-40 ${blendClass} ${blobAnimationClass} ${prefersReducedMotion ? '' : 'animation-delay-2000'}`.trim()}></div>
-            <div className="absolute top-1/2 left-1/2 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-800/30 blur-[48px] opacity-30"></div>
+            <div className="absolute top-1/2 left-1/2 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-100/80 dark:bg-slate-800/80 blur-[48px] opacity-30"></div>
 
             {/* Animated Particles */}
             <div className="absolute inset-0">
                 {particles.map((p, i) => (
                     <motion.div
                         key={i}
-                        className="absolute bg-white/10 rounded-full"
+                        className="absolute bg-slate-300/30 dark:bg-white/10 rounded-full"
                         style={{
                             width: p.w,
                             height: p.h,

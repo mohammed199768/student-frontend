@@ -45,7 +45,6 @@ export default function RegisterPage() {
     });
 
     const onSubmit = async (values: z.infer<typeof registerSchema>) => {
-        // Prevent duplicate concurrent submissions before React re-renders button disabled state.
         if (submitLockRef.current) return;
         submitLockRef.current = true;
         setIsSubmitting(true);
@@ -76,75 +75,75 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4">
+        <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-950 p-4">
             <div className="w-full max-w-md">
                 <div className="mb-8 text-center">
                     <Link href="/" className="inline-flex items-center text-indigo-600 font-bold mb-4 hover:underline">
                         <ArrowLeft className="mr-2 h-4 w-4 rtl:rotate-180" /> {t('back_home')}
                     </Link>
-                    <h1 className="text-3xl font-extrabold text-slate-900">
+                    <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">
                         {t('create_account')}
                     </h1>
-                    <p className="mt-2 text-slate-600">
+                    <p className="mt-2 text-slate-600 dark:text-slate-300">
                         {t('register_subtitle')}
                     </p>
                 </div>
 
-                <div className="rounded-3xl bg-white p-8 shadow-xl shadow-slate-200 border border-slate-100">
+                <div className="rounded-3xl bg-white dark:bg-slate-800 p-8 shadow-xl shadow-slate-200 dark:shadow-slate-950/30 border border-slate-100 dark:border-slate-700">
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="mb-2 block text-sm font-bold text-slate-700">{t('first_name')}</label>
+                                <label className="mb-2 block text-sm font-bold text-slate-700 dark:text-slate-200">{t('first_name')}</label>
                                 <input
                                     {...register('firstName')}
                                     type="text"
-                                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm focus:border-indigo-500 focus:outline-none"
+                                    className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700 p-3 text-sm text-slate-900 dark:text-white focus:border-indigo-500 focus:outline-none"
                                 />
                                 {errors.firstName && <p className="mt-1 text-xs text-red-500">{errors.firstName.message}</p>}
                             </div>
                             <div>
-                                <label className="mb-2 block text-sm font-bold text-slate-700">{t('last_name')}</label>
+                                <label className="mb-2 block text-sm font-bold text-slate-700 dark:text-slate-200">{t('last_name')}</label>
                                 <input
                                     {...register('lastName')}
                                     type="text"
-                                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm focus:border-indigo-500 focus:outline-none"
+                                    className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700 p-3 text-sm text-slate-900 dark:text-white focus:border-indigo-500 focus:outline-none"
                                 />
                                 {errors.lastName && <p className="mt-1 text-xs text-red-500">{errors.lastName.message}</p>}
                             </div>
                         </div>
 
                         <div>
-                            <label className="mb-2 block text-sm font-bold text-slate-700">{t('phone_number')}</label>
+                            <label className="mb-2 block text-sm font-bold text-slate-700 dark:text-slate-200">{t('phone_number')}</label>
                             <input
                                 {...register('phoneNumber')}
                                 type="tel"
                                 placeholder="+123..."
-                                className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm focus:border-indigo-500 focus:outline-none dir-ltr"
+                                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700 p-3 text-sm text-slate-900 dark:text-white focus:border-indigo-500 focus:outline-none dir-ltr"
                             />
                         </div>
 
                         <div>
-                            <label className="mb-2 block text-sm font-bold text-slate-700">{t('email')}</label>
+                            <label className="mb-2 block text-sm font-bold text-slate-700 dark:text-slate-200">{t('email')}</label>
                             <input
                                 {...register('email')}
                                 type="email"
-                                className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm focus:border-indigo-500 focus:outline-none dir-ltr"
+                                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700 p-3 text-sm text-slate-900 dark:text-white focus:border-indigo-500 focus:outline-none dir-ltr"
                             />
                             {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
                         </div>
 
                         <div>
-                            <label className="mb-2 block text-sm font-bold text-slate-700">{t('password')}</label>
+                            <label className="mb-2 block text-sm font-bold text-slate-700 dark:text-slate-200">{t('password')}</label>
                             <div className="relative">
                                 <input
                                     {...register('password')}
                                     type={showPassword ? 'text' : 'password'}
-                                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 pr-10 text-sm focus:border-indigo-500 focus:outline-none dir-ltr rtl:pl-10"
+                                    className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700 p-3 pr-10 text-sm text-slate-900 dark:text-white focus:border-indigo-500 focus:outline-none dir-ltr rtl:pl-10"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-3.5 text-slate-400 hover:text-slate-600 rtl:left-3 rtl:right-auto"
+                                    className="absolute right-3 top-3.5 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rtl:left-3 rtl:right-auto"
                                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                                 >
                                     {showPassword ? (
@@ -166,7 +165,7 @@ export default function RegisterPage() {
                         </button>
                     </form>
 
-                    <div className="mt-8 text-center text-sm text-slate-600">
+                    <div className="mt-8 text-center text-sm text-slate-600 dark:text-slate-300">
                         {t('have_account')}{' '}
                         <Link href="/login" className="font-bold text-indigo-600 hover:underline">
                             {ct('login')}

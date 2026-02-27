@@ -34,7 +34,7 @@ export function HeroSection() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-white mb-8 leading-[1.1]"
+                        className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-slate-900 dark:text-white mb-8 leading-[1.1]"
                     >
                         {t('hero_headline_1')}
                         <br />
@@ -59,7 +59,7 @@ export function HeroSection() {
                         </Link>
                         <Link
                             href="/courses"
-                            className="w-full sm:w-auto px-8 py-5 rounded-2xl bg-slate-800 text-white font-bold text-lg border border-slate-700 hover:bg-slate-700 transition-all hover:scale-105 active:scale-95 flex items-center justify-center"
+                            className="w-full sm:w-auto px-8 py-5 rounded-2xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold text-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all hover:scale-105 active:scale-95 flex items-center justify-center"
                         >
                             <Play className="w-5 h-5 ml-2 fill-current" />
                             {t('hero_cta_secondary')}
@@ -74,15 +74,15 @@ export function HeroSection() {
                         className="relative w-full max-w-6xl mx-auto perspective-1000 group"
                     >
                         {/* Main Dashboard Frame */}
-                        <div className="relative bg-slate-900 rounded-3xl border border-white/10 shadow-2xl overflow-hidden aspect-video md:aspect-21/9">
+                        <div className="relative bg-slate-100 dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden aspect-video md:aspect-21/9">
                             {/* Browser Header */}
-                            <div className="absolute top-0 inset-x-0 h-10 bg-slate-950/50 border-b border-white/5 flex items-center px-4 gap-2 z-10 backdrop-blur-md">
+                            <div className="absolute top-0 inset-x-0 h-10 bg-slate-100/80 dark:bg-slate-950/50 border-b border-slate-100 dark:border-white/5 flex items-center px-4 gap-2 z-10 backdrop-blur-md">
                                 <div className="flex gap-2">
                                     <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
                                     <div className="w-3 h-3 rounded-full bg-amber-500/20 border border-amber-500/50"></div>
                                     <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
                                 </div>
-                                <div className="mx-auto px-4 py-1 rounded-full bg-white/5 text-[10px] text-slate-500 font-mono tracking-widest hidden sm:block">
+                                <div className="mx-auto px-4 py-1 rounded-full bg-white/5 text-[10px] text-slate-500 dark:text-slate-400 font-mono tracking-widest hidden sm:block">
                                     www.manalalhihi.com
                                 </div>
                             </div>
@@ -99,7 +99,7 @@ export function HeroSection() {
                             />
 
                             {/* Overlay Gradient */}
-                            <div className="absolute inset-0 bg-linear-to-t from-slate-900 via-transparent to-transparent z-0"></div>
+                            <div className="absolute inset-0 bg-linear-to-t from-slate-100 dark:from-slate-900 via-transparent to-transparent z-0"></div>
                         </div>
 
 
@@ -107,7 +107,7 @@ export function HeroSection() {
                         <motion.div
                             animate={{ y: [0, -20, 0] }}
                             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                            className="absolute -top-12 -left-8 md:top-24 md:-left-16 p-3 bg-slate-800/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl hidden lg:block"
+                            className="absolute -top-12 -left-8 md:top-24 md:-left-16 p-3 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl hidden lg:block"
                         >
                             <Link href="/">
                                 <Image
@@ -123,7 +123,7 @@ export function HeroSection() {
                         <motion.div
                             animate={{ y: [0, 20, 0] }}
                             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                            className="absolute -top-8 -right-8 md:top-20 md:-right-12 p-3 bg-slate-800/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl hidden lg:block"
+                            className="absolute -top-8 -right-8 md:top-20 md:-right-12 p-3 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl hidden lg:block"
                         >
                             <Link href="/">
                                 <Image

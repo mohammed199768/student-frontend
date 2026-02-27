@@ -32,7 +32,7 @@ export default async function UniversityPage({ params }: UniversityPageProps) {
     }
 
     return (
-        <div className="min-h-screen bg-slate-950">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
             <Navbar />
             <div className="pb-24 pt-12 md:pb-20">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">

@@ -40,10 +40,10 @@ export default async function CourseDetailPage({ params }: PageProps) {
     if (!course) return notFound();
 
     return (
-        <div className="min-h-screen bg-slate-950 pb-24 md:pb-20">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-24 md:pb-20">
             <Navbar />
             {/* --- Hero Section --- */}
-            <div className="relative bg-slate-900 border-b border-white/5 pt-12 pb-12 lg:pt-20 lg:pb-24">
+            <div className="relative bg-slate-100 dark:bg-slate-900 border-b border-slate-100 dark:border-white/5 pt-12 pb-12 lg:pt-20 lg:pb-24">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid lg:grid-cols-12 gap-12">
                         {/* Left Column (Content) */}
@@ -99,7 +99,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
                     <div className="lg:col-span-4 lg:start-9 order-1 lg:order-2">
                         <div className="sticky top-24 space-y-6">
                             {/* Course Enrollment Card */}
-                            <div className="bg-slate-900 rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
+                            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 overflow-hidden shadow-2xl">
                                 {/* Preview Video / Thumbnail */}
                                 <CoursePreviewPlayer
                                     title={course.title}
@@ -242,3 +242,4 @@ export default async function CourseDetailPage({ params }: PageProps) {
         </div>
     );
 }
+

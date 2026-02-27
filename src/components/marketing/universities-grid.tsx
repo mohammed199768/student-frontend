@@ -39,7 +39,7 @@ export function UniversitiesGrid() {
         return (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {[1, 2, 3, 4].map(i => (
-                    <div key={i} className="h-40 rounded-3xl bg-white/5 animate-pulse border border-white/10"></div>
+                    <div key={i} className="h-40 rounded-3xl bg-slate-100 dark:bg-white/5 animate-pulse border border-slate-200 dark:border-white/10"></div>
                 ))}
             </div>
         );
@@ -59,7 +59,7 @@ export function UniversitiesGrid() {
                 <motion.div variants={item} key={university.id} className="relative z-10 h-full">
                     <Link
                         href={`/universities/${university.id}`}
-                        className="group relative grid h-[248px] grid-rows-[auto_1fr_auto] items-center justify-items-center rounded-4xl border border-white/10 bg-white/5 p-5 text-center transition-all hover:-translate-y-2 hover:bg-white/10 hover:shadow-2xl hover:shadow-indigo-500/20 sm:h-[264px] sm:p-6"
+                        className="group relative grid h-[248px] grid-rows-[auto_1fr_auto] items-center justify-items-center rounded-4xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 p-5 text-center transition-all hover:-translate-y-2 hover:bg-slate-200 dark:hover:bg-white/10 hover:shadow-2xl hover:shadow-indigo-500/20 sm:h-[264px] sm:p-6"
                     >
                         <div className="relative aspect-square mb-4 flex h-28 w-28 items-center justify-center rounded-3xl bg-white/95 p-3 shadow-lg transition-transform duration-300 group-hover:scale-105 sm:mb-5 sm:h-32 sm:w-32">
                             {(university.logoUrl || university.logo) ? (
@@ -76,11 +76,11 @@ export function UniversitiesGrid() {
                             )}
                         </div>
 
-                        <h3 className="mb-3 line-clamp-2 min-h-[3.5rem] text-base font-bold leading-7 text-white transition-colors group-hover:text-amber-400 sm:text-lg">
+                        <h3 className="mb-3 line-clamp-2 min-h-[3.5rem] text-base font-bold leading-7 text-slate-900 dark:text-white transition-colors group-hover:text-amber-400 sm:text-lg">
                             {university.name}
                         </h3>
 
-                        <span className="flex items-center gap-1 text-xs font-medium text-slate-400 transition-colors group-hover:text-white">
+                        <span className="flex items-center gap-1 text-xs font-medium text-slate-500 dark:text-slate-400 transition-colors group-hover:text-slate-900 dark:group-hover:text-white">
                             {t('universities_explore')} <ArrowRight className="w-3 h-3 group-hover:translate-x-[-4px] transition-transform rtl:group-hover:translate-x-[4px]" />
                         </span>
 
