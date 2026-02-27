@@ -16,7 +16,7 @@ export function CourseCard({ course, variant = 'light' }: CourseCardProps) {
     const isDark = variant === 'dark';
     const bgClass = isDark
         ? "bg-white/5 dark:bg-white/5 border-white/10 dark:border-white/10 hover:bg-white/10"
-        : "bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300";
+        : "bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300";
 
     const textSub = "text-slate-500 dark:text-slate-400";
     const priceColor = "text-slate-900 dark:text-white font-bold";
