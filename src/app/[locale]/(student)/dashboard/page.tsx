@@ -15,11 +15,13 @@ import { Progress as ProgressBar } from '@/components/ui/progress';
 import { useTranslations } from 'next-intl';
 
 export default function DashboardPage() {
-    const { user } = useAuth();
+    const { user, status } = useAuth();
     const t = useTranslations('student.dashboard');
+    const isAuthInitializing = status === 'initializing';
 
     const { data: courses = [], isLoading } = useQuery({
         queryKey: ['my-courses'],
+        enabled: status === 'authenticated',
         queryFn: async () => {
             const { data } = await apiClient.get('/students/me/courses');
             return data.data as (Course & { progress: Progress })[];
@@ -66,7 +68,7 @@ export default function DashboardPage() {
                                 </div>
                             </div>
 
-                            {isLoading ? (
+                            {isAuthInitializing || isLoading ? (
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     {[1, 2, 3, 4].map(i => (
                                         <div key={i} className="h-64 rounded-3xl bg-white dark:bg-slate-800/50 shadow-sm animate-pulse"></div>

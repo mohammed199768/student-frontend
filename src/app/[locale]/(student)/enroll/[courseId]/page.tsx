@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api/client';
 import { Course } from '@/lib/api/types';
 import { useRouter } from '@/i18n/routing';
@@ -14,14 +14,27 @@ import { formatPrice } from '@/lib/utils';
 import { buildWhatsAppUrl } from '@/lib/constants/support';
 
 import { useTranslations } from 'next-intl';
+import { useAuth } from '@/lib/contexts/auth-context';
+import { FEATURE_FLAGS } from '@/lib/config/feature-flags';
 
 export default function EnrollmentPage() {
     const { courseId } = useParams() as { courseId: string; locale: string };
     const [requestSuccess, setRequestSuccess] = useState(false);
     const [enrollmentData, setEnrollmentData] = useState<{ id: string } | null>(null);
+    const [hasActiveEnrollment, setHasActiveEnrollment] = useState(false);
     const router = useRouter();
     const t = useTranslations('student.enroll');
+    const at = useTranslations('auth');
     const ct = useTranslations('common');
+    const queryClient = useQueryClient();
+    const { user, status } = useAuth();
+
+    const isVerificationKnown = typeof user?.isEmailVerified === 'boolean';
+    const isBlockedByEmailVerification =
+        FEATURE_FLAGS.FEATURE_EMAIL_VERIFICATION_GATE &&
+        isVerificationKnown &&
+        !!user &&
+        !user.isEmailVerified;
 
     const { data: course, isLoading: loadingCourse } = useQuery({
         queryKey: ['course-enroll', courseId],
@@ -37,9 +50,17 @@ export default function EnrollmentPage() {
             return data.data;
         },
         onSuccess: (data) => {
+            if (FEATURE_FLAGS.FEATURE_ENROLL_STATE_SYNC) {
+                void queryClient.invalidateQueries({ queryKey: ['my-courses'] });
+                void queryClient.invalidateQueries({ queryKey: ['course-enroll', courseId] });
+            }
+
             if (data.status === 'ACTIVE') {
+                setHasActiveEnrollment(true);
                 toast.success(t('success_title'));
-                router.push(`/learn/${courseId}`);
+                if (!FEATURE_FLAGS.FEATURE_ENROLL_STATE_SYNC) {
+                    router.push(`/learn/${courseId}`);
+                }
             } else {
                 setEnrollmentData(data);
                 setRequestSuccess(true);
@@ -69,11 +90,24 @@ export default function EnrollmentPage() {
 
             if (err.response?.data?.message?.includes('Already enrolled')) {
                 toast.error(t('already_enrolled'));
+                if (FEATURE_FLAGS.FEATURE_ENROLL_STATE_SYNC) {
+                    setHasActiveEnrollment(true);
+                }
                 return;
             }
             toast.error(err.response?.data?.message || t('request_failed'));
         },
     });
+
+    const handleResendCode = async () => {
+        if (!user?.email) return;
+        try {
+            await apiClient.post('/auth/resend-verification', { email: user.email });
+            toast.success(at('resend_success'));
+        } catch {
+            toast.error(at('resend_error'));
+        }
+    };
 
     const handleWhatsAppRedirect = () => {
         if (!enrollmentData) return;
@@ -153,8 +187,14 @@ export default function EnrollmentPage() {
                                 </p>
 
                                 <button
-                                    onClick={() => enrollMutation.mutate()}
-                                    disabled={enrollMutation.isPending}
+                                    onClick={() => {
+                                        if (hasActiveEnrollment) {
+                                            router.push(`/learn/${courseId}`);
+                                            return;
+                                        }
+                                        enrollMutation.mutate();
+                                    }}
+                                    disabled={enrollMutation.isPending || status !== 'authenticated' || isBlockedByEmailVerification}
                                     className="flex w-full items-center justify-center gap-2 rounded-2xl bg-indigo-600 py-4 font-bold text-white shadow-lg shadow-indigo-100 transition-all hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-70"
                                 >
                                     {enrollMutation.isPending ? (
@@ -162,10 +202,32 @@ export default function EnrollmentPage() {
                                             <Loader2 className="h-5 w-5 animate-spin" />
                                             {t('processing')}
                                         </>
+                                    ) : hasActiveEnrollment ? (
+                                        'Go to course'
                                     ) : (
                                         t('send_request')
                                     )}
                                 </button>
+
+                                {isBlockedByEmailVerification && (
+                                    <div className="mt-4 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+                                        <p className="font-semibold">{t('verify_required')}</p>
+                                        <div className="mt-3 flex flex-wrap gap-2">
+                                            <button
+                                                onClick={() => router.push('/verify-email')}
+                                                className="rounded-lg bg-indigo-600 px-3 py-2 text-xs font-bold text-white hover:bg-indigo-700"
+                                            >
+                                                {t('verify_now')}
+                                            </button>
+                                            <button
+                                                onClick={handleResendCode}
+                                                className="rounded-lg border border-amber-400 px-3 py-2 text-xs font-bold text-amber-900 hover:bg-amber-100"
+                                            >
+                                                {at('resend_code')}
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
 
                                 <div className="mt-6 flex items-start gap-3 rounded-xl bg-indigo-50 p-4 text-sm text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200">
                                     <ShieldCheck className="h-5 w-5 shrink-0" />

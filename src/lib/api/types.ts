@@ -80,6 +80,8 @@ export interface User {
     firstName?: string;
     lastName?: string;
     phoneNumber?: string;
+    emailVerifiedAt?: string | null;
+    isEmailVerified?: boolean;
     role: 'STUDENT' | 'ADMIN';
 }
 

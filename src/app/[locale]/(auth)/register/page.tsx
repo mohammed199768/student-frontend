@@ -49,12 +49,14 @@ export default function RegisterPage() {
         submitLockRef.current = true;
         setIsSubmitting(true);
         try {
-            await apiClient.post('/auth/register', values);
-            const loginRes = await apiClient.post<any>('/auth/login', {
-                email: values.email,
-                password: values.password,
-            });
-            await login(loginRes.data.data.accessToken, '/verify-email');
+            const registerRes = await apiClient.post<any>('/auth/register', values);
+            const accessToken = registerRes.data?.data?.accessToken;
+
+            if (!accessToken) {
+                throw new Error('Registration succeeded without access token');
+            }
+
+            await login(accessToken, '/verify-email');
             toast.success(t('register_success'));
         } catch (error: unknown) {
             const err = error as ApiError;
@@ -191,4 +193,3 @@ export default function RegisterPage() {
         </div>
     );
 }
-

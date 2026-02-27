@@ -1,22 +1,27 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { User } from '@/lib/api/types';
 import { apiClient } from '@/lib/api/client';
 import { useRouter } from '@/i18n/routing';
 import toast from 'react-hot-toast';
 import { isStudentRole } from '@/lib/rbac';
+import { useQueryClient } from '@tanstack/react-query';
+
+type AuthStatus = 'initializing' | 'authenticated' | 'guest';
 
 interface AuthContextType {
     user: User | null;
     isLoading: boolean;
+    status: AuthStatus;
+    isReady: boolean;
     /**
      * SECURITY: Token is stored in-memory only via apiClient
      * The token parameter is passed here and immediately stored in the apiClient closure
      */
     login: (accessToken: string, redirectPath?: string) => Promise<void>;
     logout: () => Promise<void>;
-    refreshUser: () => Promise<void>;
+    refreshUser: () => Promise<boolean>;
     /**
      * SECURITY: Get current token for secure operations (e.g., PDF viewing)
      */
@@ -28,21 +33,29 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [status, setStatus] = useState<AuthStatus>('initializing');
     const router = useRouter();
+    const queryClient = useQueryClient();
 
-    const refreshUser = async () => {
+    const applyAuthStatus = useCallback((nextStatus: AuthStatus) => {
+        setStatus(nextStatus);
+        setIsLoading(nextStatus === 'initializing');
+        apiClient.setAuthLifecycleStatus(nextStatus);
+    }, []);
+
+    const refreshUser = useCallback(async (): Promise<boolean> => {
         try {
             const { data } = await apiClient.get('/auth/me');
-            const userData = data.data;
+            const userData = data.data as User & { emailVerifiedAt?: string | null; isEmailVerified?: boolean };
 
             // RBAC GUARD: Ensure only STUDENT role can access student frontend
             if (userData && !isStudentRole(userData.role)) {
-                console.warn(`[Auth] Access Denied. Role: ${userData.role}`);
-                // Clear session hint to prevent infinite retry loops
+                console.warn(`[Auth] Access denied. Role: ${userData.role}`);
                 document.cookie = 'isLoggedIn=; path=/; max-age=0';
                 setUser(null);
                 apiClient.clearAccessToken();
-                return;
+                applyAuthStatus('guest');
+                return false;
             }
 
             // Handle backend returning firstName/lastName instead of fullName
@@ -50,39 +63,81 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 userData.fullName = `${userData.firstName || ''} ${userData.lastName || ''}`.trim();
             }
 
+            if (typeof userData.isEmailVerified === 'boolean') {
+                userData.isEmailVerified = userData.isEmailVerified;
+            } else if ('emailVerifiedAt' in userData) {
+                userData.isEmailVerified = !!userData.emailVerifiedAt;
+            } else {
+                userData.isEmailVerified = undefined;
+            }
+
             setUser(userData);
+            applyAuthStatus('authenticated');
+            return true;
         } catch {
             console.debug('Auth check failed - switching to Guest Mode');
             setUser(null);
+            apiClient.clearAccessToken();
+            document.cookie = 'isLoggedIn=; path=/; max-age=0';
+            applyAuthStatus('guest');
+            return false;
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [applyAuthStatus]);
 
     useEffect(() => {
-        // Optimization: Only attempt to fetch user if we have a session hint
-        // This prevents 401 noise on public pages for guest users
-        // The isLoggedIn cookie is a non-sensitive hint (not the actual token)
-        if (document.cookie.includes('isLoggedIn=true')) {
-            refreshUser();
-        } else {
-            setIsLoading(false);
-        }
-    }, []);
+        let isMounted = true;
+
+        const initializeAuth = async () => {
+            applyAuthStatus('initializing');
+
+            // Attempt auth bootstrap only when session hint cookie exists.
+            const hasSessionHint = document.cookie.includes('isLoggedIn=true');
+            if (!hasSessionHint) {
+                if (!isMounted) return;
+                setUser(null);
+                applyAuthStatus('guest');
+                return;
+            }
+
+            const hasSession = await apiClient.bootstrapSession();
+            if (!hasSession) {
+                if (!isMounted) return;
+                setUser(null);
+                document.cookie = 'isLoggedIn=; path=/; max-age=0';
+                applyAuthStatus('guest');
+                return;
+            }
+
+            if (!isMounted) return;
+            await refreshUser();
+        };
+
+        initializeAuth();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [applyAuthStatus, refreshUser]);
 
     /**
      * SECURITY: Login stores token in memory only via apiClient.setAccessToken()
      * No localStorage or sessionStorage is used.
      */
     const login = async (accessToken: string, redirectPath?: string) => {
-        // SECURITY: Store token in memory only
         apiClient.setAccessToken(accessToken);
-        
-        // Set a cookie hint for the middleware (NON-SENSITIVE - just a boolean flag)
-        // This is safe because it doesn't contain the actual token
+        applyAuthStatus('initializing');
+
+        // Non-sensitive session hint for middleware routing.
         document.cookie = `isLoggedIn=true; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`;
-        
-        await refreshUser();
+
+        const hydrated = await refreshUser();
+        if (!hydrated) {
+            throw new Error('Failed to initialize authenticated user');
+        }
+
+        queryClient.clear();
         router.push(redirectPath || '/dashboard');
     };
 
@@ -95,28 +150,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } catch (error) {
             console.error('Logout error', error);
         } finally {
-            // SECURITY: Clear in-memory token
             apiClient.clearAccessToken();
-            
-            // Clear the session hint cookie
             document.cookie = 'isLoggedIn=; path=/; max-age=0';
-            
             setUser(null);
+            applyAuthStatus('guest');
+            queryClient.clear();
             router.push('/login');
-            toast.success('تم تسجيل الخروج بنجاح');
+            toast.success('Logged out successfully');
         }
     };
 
     /**
      * SECURITY: Provide token access for components that need it (e.g., PDF viewer)
-     * This ensures token is passed via props/context, never stored in DOM/localStorage
      */
     const getToken = (): string | null => {
         return apiClient.getToken();
     };
 
     return (
-        <AuthContext.Provider value={{ user, isLoading, login, logout, refreshUser, getToken }}>
+        <AuthContext.Provider
+            value={{
+                user,
+                isLoading,
+                status,
+                isReady: status !== 'initializing',
+                login,
+                logout,
+                refreshUser,
+                getToken,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );

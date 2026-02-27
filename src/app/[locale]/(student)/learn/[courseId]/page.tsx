@@ -26,6 +26,7 @@ import { QuizPlayer } from '@/components/learn/quiz-player';
 import { PptxDownloader } from '@/components/learn/pptx-downloader';
 import { PlayerWrapper } from '@/components/learn/player-wrapper';
 import { useTranslations } from 'next-intl';
+import { useAuth } from '@/lib/contexts/auth-context';
 
 export default function LearnPage() {
     const { courseId } = useParams() as { courseId: string };
@@ -33,9 +34,11 @@ export default function LearnPage() {
     const assetId = searchParams.get('assetId');
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const t = useTranslations('student.learn');
+    const { status } = useAuth();
 
     const { data: curriculum, isLoading } = useQuery({
         queryKey: ['curriculum', courseId],
+        enabled: status === 'authenticated',
         queryFn: async () => {
             const { data } = await apiClient.get(`/courses/${courseId}/content`);
             return (data.data.content || []) as Section[];
@@ -44,6 +47,7 @@ export default function LearnPage() {
 
     const { data: progress } = useQuery({
         queryKey: ['progress', courseId],
+        enabled: status === 'authenticated',
         queryFn: async () => {
             const { data } = await apiClient.get(`/progress/course/${courseId}`);
             return data.data as Progress;
@@ -67,6 +71,7 @@ export default function LearnPage() {
         return allAssets[0];
     }, [allAssets, assetId]);
 
+    if (status === 'initializing') return <div className="p-20 text-center">{t('loading')}</div>;
     if (isLoading) return <div className="p-20 text-center">{t('loading')}</div>;
 
     return (

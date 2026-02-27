@@ -1,7 +1,12 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig, AxiosRequestConfig } from 'axios';
 import { logger } from '@/lib/utils/logger';
+import { FEATURE_FLAGS } from '@/lib/config/feature-flags';
+import { apiMetrics } from '@/lib/api/metrics';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const AUTH_READY_TIMEOUT_MS = 5000;
+const REFRESH_COOLDOWN_MS = 15000;
+type AuthLifecycleStatus = 'initializing' | 'authenticated' | 'guest';
 
 if (!API_BASE_URL) {
   throw new Error('NEXT_PUBLIC_API_BASE_URL is not defined');
@@ -15,12 +20,13 @@ if (!API_BASE_URL) {
 class ApiClient {
   private axiosInstance: AxiosInstance;
   private accessToken: string | null = null;
-  private isRefreshing = false;
-  private refreshSubscribers: Array<{
-    resolve: (token: string | null) => void;
-    reject: (error: Error) => void;
-  }> = [];
+  private refreshPromise: Promise<string | null> | null = null;
+  private refreshBlockedUntil = 0;
   private activeControllers: Map<string, AbortController> = new Map();
+  private authLifecycleStatus: AuthLifecycleStatus = 'initializing';
+  private authReadyResolvers: Array<() => void> = [];
+  private isSessionExpiryHandled = false;
+  private lastHealthCheckAt = 0;
 
   constructor() {
     this.axiosInstance = axios.create({
@@ -31,12 +37,199 @@ class ApiClient {
       },
     });
 
+    apiMetrics.startReporter();
     this.setupInterceptors();
+  }
+
+  private isAuthMeRequest(url?: string): boolean {
+    return !!url?.includes('/auth/me');
+  }
+
+  private isAuthProtectedRequest(url?: string): boolean {
+    if (!url) return false;
+
+    const protectedPrefixes = [
+      '/auth/me',
+      '/auth/profile',
+      '/auth/logout',
+      '/auth/verify-email',
+      '/auth/resend-verification',
+      '/students/',
+      '/courses/',
+      '/progress/',
+      '/enrollments/',
+    ];
+
+    return protectedPrefixes.some((prefix) => url.includes(prefix));
+  }
+
+  private isAuthBypassEndpoint(url: string): boolean {
+    return (
+      url.includes('/auth/login') ||
+      url.includes('/auth/register') ||
+      url.includes('/auth/refresh') ||
+      url.includes('/auth/forgot-password') ||
+      url.includes('/auth/reset-password')
+    );
+  }
+
+  private resolveAuthReadyWaiters() {
+    this.authReadyResolvers.forEach((resolve) => resolve());
+    this.authReadyResolvers = [];
+  }
+
+  private async waitForAuthReady(timeoutMs = AUTH_READY_TIMEOUT_MS): Promise<void> {
+    if (this.authLifecycleStatus !== 'initializing') return;
+
+    await Promise.race([
+      new Promise<void>((resolve) => this.authReadyResolvers.push(resolve)),
+      new Promise<void>((resolve) => setTimeout(resolve, timeoutMs)),
+    ]);
+  }
+
+  private shouldAttemptRefresh(error: AxiosError, originalRequest: InternalAxiosRequestConfig & { _retry?: boolean }): boolean {
+    if (error.response?.status !== 401 || originalRequest._retry) {
+      return false;
+    }
+
+    const requestUrl = originalRequest.url || '';
+    if (this.isAuthBypassEndpoint(requestUrl)) {
+      return false;
+    }
+
+    if (Date.now() < this.refreshBlockedUntil) {
+      logger.warn('Refresh cooldown active - skipping refresh attempt', { requestUrl });
+      return false;
+    }
+
+    const responseMessage = String((error.response?.data as { message?: string } | undefined)?.message || '').toLowerCase();
+    const looksMissingToken =
+      responseMessage.includes('token missing') ||
+      responseMessage.includes('authentication token missing') ||
+      responseMessage.includes('missing or invalid');
+    const looksExpiredToken =
+      responseMessage.includes('expired') ||
+      responseMessage.includes('invalid or expired access token') ||
+      responseMessage.includes('jwt expired');
+
+    if (!this.accessToken && !looksExpiredToken) {
+      return false;
+    }
+
+    if (looksMissingToken && !looksExpiredToken) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private async refreshAccessToken(reason: 'bootstrap' | 'response_401'): Promise<string | null> {
+    if (Date.now() < this.refreshBlockedUntil) {
+      return null;
+    }
+
+    if (this.refreshPromise) {
+      return this.refreshPromise;
+    }
+
+    apiMetrics.trackRefreshAttempt(reason);
+    this.refreshPromise = (async () => {
+      try {
+        logger.info('Attempting token refresh', { reason });
+        const { data } = await axios.post(
+          `${API_BASE_URL}/auth/refresh`,
+          {},
+          { withCredentials: true }
+        );
+        const newToken = data.data?.accessToken;
+        if (!newToken) {
+          throw new Error('Invalid refresh response');
+        }
+
+        this.setAccessToken(newToken);
+        logger.info('Token refresh successful');
+        return newToken;
+      } catch (refreshError) {
+        apiMetrics.trackRefreshFailure();
+        logger.error('Token refresh failed');
+        this.clearAccessToken();
+        this.refreshBlockedUntil = Date.now() + REFRESH_COOLDOWN_MS;
+        return null;
+      } finally {
+        this.refreshPromise = null;
+      }
+    })();
+
+    return this.refreshPromise;
+  }
+
+  private handleSessionExpired() {
+    this.clearAccessToken();
+    this.setAuthLifecycleStatus('guest');
+
+    if (this.isSessionExpiryHandled) return;
+    this.isSessionExpiryHandled = true;
+    setTimeout(() => {
+      this.isSessionExpiryHandled = false;
+    }, 1500);
+
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const path = window.location.pathname;
+    const protectedSegments = ['/dashboard', '/profile', '/learn', '/enroll'];
+    const isProtected = protectedSegments.some((segment) => path.includes(segment));
+
+    if (isProtected) {
+      logger.warn('Session expired on protected route - forcing redirect');
+      const currentLang = path.startsWith('/ar') ? 'ar' : 'en';
+      const redirectTarget = path.replace(/^\/(en|ar)/, '') || '/dashboard';
+      window.location.href = `/${currentLang}/login?reason=session_expired&redirect=${encodeURIComponent(redirectTarget)}`;
+    } else {
+      logger.info('Session expired on public route - staying in Guest Mode');
+    }
   }
 
   private setupInterceptors() {
     // Request interceptor: Attach in-memory token
-    this.axiosInstance.interceptors.request.use((config) => {
+    this.axiosInstance.interceptors.request.use(async (config) => {
+      apiMetrics.trackRequest(config.url);
+
+      const requestUrl = config.url || '';
+      if (FEATURE_FLAGS.FEATURE_HEALTH_POLLING_V2 && requestUrl.includes('/health')) {
+        const now = Date.now();
+        const hasPreviousHealthRequest = this.lastHealthCheckAt > 0;
+        const isHidden = typeof document !== 'undefined' && document.visibilityState === 'hidden';
+        const isTooFrequent = hasPreviousHealthRequest && now - this.lastHealthCheckAt < 60_000;
+        const isUnauthenticatedPoll =
+          hasPreviousHealthRequest && this.authLifecycleStatus !== 'authenticated';
+
+        if (isHidden || isTooFrequent || isUnauthenticatedPoll) {
+          throw new axios.CanceledError('Blocked noisy /health request by FEATURE_HEALTH_POLLING_V2');
+        }
+
+        this.lastHealthCheckAt = now;
+      }
+
+      if (
+        FEATURE_FLAGS.FEATURE_AUTH_READINESS_GUARD &&
+        this.authLifecycleStatus === 'initializing' &&
+        this.isAuthProtectedRequest(requestUrl)
+      ) {
+        await this.waitForAuthReady();
+      }
+
+      if (FEATURE_FLAGS.FEATURE_AUTH_NOSTORE && this.isAuthMeRequest(requestUrl)) {
+        config.headers = config.headers || {};
+        config.headers['Cache-Control'] = 'no-store';
+        config.headers['Pragma'] = 'no-cache';
+        config.params = {
+          ...(config.params || {}),
+          _ts: Date.now(),
+        };
+      }
+
       if (this.accessToken && config.headers) {
         config.headers.Authorization = `Bearer ${this.accessToken}`;
       }
@@ -56,92 +249,35 @@ class ApiClient {
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       async (error: AxiosError) => {
+        apiMetrics.trackResponseStatus(error.response?.status);
+
         const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
-        const requestUrl = originalRequest?.url || '';
-        const isRefreshRequest = requestUrl.includes('/auth/refresh');
-        const isLoginRequest = requestUrl.includes('/auth/login');
+        if (!originalRequest) {
+          return Promise.reject(error);
+        }
 
         // Skip refresh logic for aborted requests
         if (axios.isCancel(error)) {
           return Promise.reject(error);
         }
 
-        // Do not refresh on login failures; invalid credentials should surface directly.
-        if (error.response?.status === 401 && !originalRequest._retry && !isRefreshRequest && !isLoginRequest) {
-          logger.warn('401 received - checking refresh state', { url: originalRequest.url, isRefreshing: this.isRefreshing });
-          
-          if (this.isRefreshing) {
-            logger.info('Queueing request - refresh in progress');
-            return new Promise((resolve, reject) => {
-              this.refreshSubscribers.push({
-                resolve: (token) => {
-                  if (token && originalRequest.headers) {
-                    originalRequest.headers.Authorization = `Bearer ${token}`;
-                  }
-                  resolve(this.axiosInstance(originalRequest));
-                },
-                reject
-              });
-            });
-          }
-
+        if (
+          FEATURE_FLAGS.FEATURE_REFRESH_SINGLE_FLIGHT &&
+          this.shouldAttemptRefresh(error, originalRequest)
+        ) {
+          logger.warn('401 received - evaluating refresh flow', { url: originalRequest.url });
           originalRequest._retry = true;
-          this.isRefreshing = true;
-          logger.info('Attempting token refresh');
 
-          try {
-            const { data } = await axios.post(
-              `${API_BASE_URL}/auth/refresh`,
-              {},
-              { withCredentials: true }
-            );
-
-            const newToken = data.data?.accessToken;
-            if (newToken) {
-              logger.info('Token refresh successful');
-              this.setAccessToken(newToken);
-
-              // Resolve all queued requests
-              this.refreshSubscribers.forEach(({ resolve }) => resolve(newToken));
-              this.refreshSubscribers = [];
-
-              if (originalRequest.headers) {
-                originalRequest.headers.Authorization = `Bearer ${newToken}`;
-              }
-              return this.axiosInstance(originalRequest);
-            } else {
-              throw new Error('Invalid refresh response');
+          const newToken = await this.refreshAccessToken('response_401');
+          if (newToken) {
+            if (originalRequest.headers) {
+              originalRequest.headers.Authorization = `Bearer ${newToken}`;
             }
-          } catch (refreshError) {
-            logger.error('Token refresh failed');
-            
-            // Reject all queued requests
-            const error = refreshError instanceof Error ? refreshError : new Error('Token refresh failed');
-            this.refreshSubscribers.forEach(({ reject }) => reject(error));
-            this.refreshSubscribers = [];
-
-            // Clear token state
-            this.clearAccessToken();
-
-            // Handle redirect for protected routes
-            if (typeof window !== 'undefined') {
-              const path = window.location.pathname;
-              const protectedSegments = ['/dashboard', '/profile', '/learn', '/enroll'];
-              const isProtected = protectedSegments.some(segment => path.includes(segment));
-
-              if (isProtected) {
-                logger.warn('Session expired on protected route - forcing redirect');
-                const currentLang = path.startsWith('/ar') ? 'ar' : 'en';
-                const redirectTarget = path.replace(/^\/(en|ar)/, '') || '/dashboard';
-                window.location.href = `/${currentLang}/login?reason=session_expired&redirect=${encodeURIComponent(redirectTarget)}`;
-              } else {
-                logger.info('Session expired on public route - staying in Guest Mode');
-              }
-            }
-            return Promise.reject(refreshError);
-          } finally {
-            this.isRefreshing = false;
+            return this.axiosInstance(originalRequest);
           }
+
+          this.handleSessionExpired();
+          return Promise.reject(error);
         }
 
         return Promise.reject(error);
@@ -154,6 +290,7 @@ class ApiClient {
    */
   public setAccessToken(token: string) {
     this.accessToken = token;
+    this.isSessionExpiryHandled = false;
     // Also update default headers for the axios instance
     this.axiosInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
   }
@@ -164,6 +301,26 @@ class ApiClient {
   public clearAccessToken() {
     this.accessToken = null;
     delete this.axiosInstance.defaults.headers.common.Authorization;
+  }
+
+  public setAuthLifecycleStatus(status: AuthLifecycleStatus) {
+    this.authLifecycleStatus = status;
+    if (status !== 'initializing') {
+      this.resolveAuthReadyWaiters();
+    }
+  }
+
+  public getAuthLifecycleStatus(): AuthLifecycleStatus {
+    return this.authLifecycleStatus;
+  }
+
+  public async bootstrapSession(): Promise<boolean> {
+    if (this.accessToken) {
+      return true;
+    }
+
+    const refreshedToken = await this.refreshAccessToken('bootstrap');
+    return !!refreshedToken;
   }
 
   /**
