@@ -7,19 +7,21 @@ export function Footer() {
     const tc = useTranslations('common');
 
     return (
-        <footer className="border-t border-slate-100 dark:border-white/5 bg-white dark:bg-slate-950 py-12 relative z-10">
+        <footer className="border-t border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-slate-950 py-12 relative z-10">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
                     <div className="col-span-1 md:col-span-2">
                         <Link href="/" className="inline-flex items-center">
-                            <Image
-                                src="/manal-logo.png"
-                                width={140}
-                                height={32}
-                                alt="Manal Logo"
-                                className="h-8 w-auto"
-                                sizes="140px"
-                            />
+                            <span className="inline-flex items-center justify-center rounded-xl p-1.5 bg-[#1e3a5f] dark:bg-transparent">
+                                <Image
+                                    src="/manal-logo.png"
+                                    width={132}
+                                    height={30}
+                                    alt="Manal Logo"
+                                    className="h-7 w-auto object-contain"
+                                    sizes="140px"
+                                />
+                            </span>
                         </Link>
                         <p className="mt-4 max-w-xs text-slate-600 dark:text-slate-300">
                             {t('tagline')}
@@ -41,7 +43,7 @@ export function Footer() {
                         </ul>
                     </div>
                 </div>
-                <div className="mt-12 border-t border-slate-100 dark:border-white/5 pt-8 text-center">
+                <div className="mt-12 border-t border-slate-200 dark:border-white/5 pt-8 text-center">
                     <p className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-300">
                         &copy; 2026 T.MANAL LMS. All rights reserved.
                     </p>

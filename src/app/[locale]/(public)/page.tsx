@@ -104,7 +104,7 @@ export default async function HomePage() {
                                         <CourseCard key={course.id} course={course} variant="dark" />
                                     ))
                                 ) : (
-                                    <div className="col-span-full py-16 text-center bg-slate-50 dark:bg-white/5 rounded-3xl border border-dashed border-slate-200 dark:border-white/10 backdrop-blur-sm">
+                                    <div className="col-span-full py-16 text-center bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-100 dark:border-white/10 shadow-sm backdrop-blur-sm">
                                         <BookOpen className="h-16 w-16 text-slate-500 mx-auto mb-4" />
                                         <h3 className="text-xl font-bold text-slate-900 dark:text-white">{t('no_courses')}</h3>
                                         <p className="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mt-2">{t('no_courses_desc')}</p>

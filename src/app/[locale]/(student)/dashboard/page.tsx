@@ -75,7 +75,7 @@ export default function DashboardPage() {
                             ) : courses.length > 0 ? (
                                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                                     {courses.map((course) => (
-                                        <div key={course.id} className="group overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 transition-all hover:shadow-md hover:shadow-slate-100 dark:hover:shadow-black/20">
+                                        <div key={course.id} className="group overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 shadow-sm hover:shadow-md transition-all">
                                             <div className="relative aspect-video overflow-hidden">
                                                 {/* Placeholder Box - No Images Policy */}
                                                 <div className="absolute inset-0 flex items-center justify-center bg-linear-to-br from-indigo-600 to-indigo-800 transition-all group-hover:from-indigo-500 group-hover:to-indigo-700">

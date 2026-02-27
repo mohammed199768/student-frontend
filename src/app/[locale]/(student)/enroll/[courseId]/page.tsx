@@ -146,7 +146,7 @@ export default function EnrollmentPage() {
                                 <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">{t('activation_note')}</p>
                             </div>
                         ) : (
-                            <div className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-8 shadow-lg">
+                            <div className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-8 shadow-sm">
                                 <h2 className="mb-6 text-2xl font-bold text-slate-900 dark:text-white">{t('confirm_title')}</h2>
                                 <p className="mb-8 text-slate-600 dark:text-slate-300">
                                     {t('confirm_desc')}

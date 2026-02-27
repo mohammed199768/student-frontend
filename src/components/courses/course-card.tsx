@@ -16,10 +16,10 @@ export function CourseCard({ course, variant = 'light' }: CourseCardProps) {
     const isDark = variant === 'dark';
     const bgClass = isDark
         ? "bg-white/5 dark:bg-white/5 border-white/10 dark:border-white/10 hover:bg-white/10"
-        : "bg-white dark:bg-white border-slate-200 dark:border-slate-200 hover:shadow-md hover:shadow-slate-100 hover:-translate-y-0.5";
+        : "bg-white dark:bg-white border border-slate-200 dark:border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all";
 
     const textSub = "text-slate-500 dark:text-slate-400";
-    const priceColor = "text-slate-900 dark:text-white";
+    const priceColor = "text-slate-900 dark:text-white font-bold";
     const pillClass = isDark
         ? "bg-white/10 dark:bg-white/10 text-indigo-300 dark:text-indigo-300"
         : "bg-indigo-50 dark:bg-indigo-50 text-indigo-700 dark:text-indigo-700";
@@ -69,10 +69,10 @@ export function CourseCard({ course, variant = 'light' }: CourseCardProps) {
                             {course.salePrice ? (
                                 <>
                                     <span className="text-xs text-slate-400 dark:text-slate-500 line-through">{formatPrice(course.price)}</span>
-                                    <span className={`text-lg font-bold ${priceColor}`}>{formatPrice(course.salePrice)}</span>
+                                    <span className="text-lg font-bold text-slate-900 dark:text-white">{formatPrice(course.salePrice)}</span>
                                 </>
                             ) : (
-                                <span className={`text-lg font-bold ${priceColor}`}>
+                                <span className={`text-lg ${priceColor}`}>
                                     {course.isFree ? ct('free') : formatPrice(course.price)}
                                 </span>
                             )}

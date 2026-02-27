@@ -160,7 +160,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
                     <div className="lg:col-span-8 space-y-12 order-2 lg:order-1 lg:pt-12">
 
                         {/* Syllabus / Content */}
-                        <div className="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-white/10 p-6">
+                        <div className="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-white/10 p-6 shadow-sm">
                             <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">{t('curriculum')}</h2>
                             <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400 mb-6">
                                 {/* V2 Logic: Count Lectures as Sections, Parts as Lessons */}
@@ -215,7 +215,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
                         </div>
 
                         {/* Instructor */}
-                        <div className="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-white/10 p-6">
+                        <div className="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-white/10 p-6 shadow-sm">
                             <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">عن المحاضر</h2>
                             <div className="flex items-start gap-6">
                                 <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-slate-200 dark:border-slate-700 shrink-0 bg-indigo-600 flex items-center justify-center">

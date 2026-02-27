@@ -99,13 +99,16 @@ export function Navbar() {
                     <div className="flex h-16 items-center justify-between">
                         <div className="flex items-center">
                             <Link href="/" className="flex items-center">
-                                <Image
-                                    src="/manal-logo.png"
-                                    width={110}
-                                    height={25}
-                                    alt="Manal LMS Logo"
-                                    sizes="140px"
-                                />
+                                <span className="inline-flex items-center justify-center rounded-xl p-1.5 bg-[#1e3a5f] dark:bg-transparent">
+                                    <Image
+                                        src="/manal-logo.png"
+                                        width={102}
+                                        height={23}
+                                        alt="Manal LMS Logo"
+                                        sizes="140px"
+                                        className="object-contain"
+                                    />
+                                </span>
                             </Link>
                         </div>
 

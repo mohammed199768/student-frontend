@@ -59,7 +59,7 @@ export function UniversitiesGrid() {
                 <motion.div variants={item} key={university.id} className="relative z-10 h-full">
                     <Link
                         href={`/universities/${university.id}`}
-                        className="group relative grid h-[248px] grid-rows-[auto_1fr_auto] items-center justify-items-center rounded-4xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 p-5 text-center transition-all hover:-translate-y-2 hover:bg-slate-50 dark:hover:bg-white/10 hover:shadow-md hover:shadow-slate-100 dark:hover:shadow-indigo-500/20 sm:h-[264px] sm:p-6"
+                        className="group relative grid h-[248px] grid-rows-[auto_1fr_auto] items-center justify-items-center rounded-4xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 p-5 text-center shadow-sm transition-all hover:-translate-y-1 hover:bg-slate-50 dark:hover:bg-white/10 hover:shadow-md hover:shadow-slate-100 dark:hover:shadow-indigo-500/20 sm:h-[264px] sm:p-6"
                     >
                         <div className="relative aspect-square mb-4 flex h-28 w-28 items-center justify-center rounded-3xl bg-white/95 p-3 shadow-lg transition-transform duration-300 group-hover:scale-105 sm:mb-5 sm:h-32 sm:w-32">
                             {(university.logoUrl || university.logo) ? (
