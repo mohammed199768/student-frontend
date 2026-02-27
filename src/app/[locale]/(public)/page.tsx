@@ -101,7 +101,7 @@ export default async function HomePage() {
                             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
                                 {courses.length > 0 ? (
                                     courses.map((course) => (
-                                        <CourseCard key={course.id} course={course} variant="dark" />
+                                        <CourseCard key={course.id} course={course} />
                                     ))
                                 ) : (
                                     <div className="col-span-full py-16 text-center bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-100 dark:border-white/10 shadow-sm backdrop-blur-sm">

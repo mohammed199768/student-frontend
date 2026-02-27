@@ -1,19 +1,8 @@
 import { Clock, PlayCircle } from 'lucide-react';
 
-interface CourseCardSkeletonProps {
-    variant?: 'light' | 'dark';
-}
-
-export function CourseCardSkeleton({ variant = 'light' }: CourseCardSkeletonProps) {
-    const isDark = variant === 'dark';
-    
-    // Base styles mirroring CourseCard
-    const cardBg = isDark 
-        ? "bg-slate-900 border-slate-800 shadow-xl" 
-        : "bg-slate-100 border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)]";
-    
+export function CourseCardSkeleton() {
     return (
-        <div className={`flex flex-col overflow-hidden rounded-[24px] border ${cardBg}`}>
+        <div className="flex flex-col overflow-hidden rounded-[24px] border bg-slate-100 border-slate-200/70 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:bg-slate-900 dark:border-slate-800 dark:shadow-xl">
             {/* Thumbnail Placeholder */}
             <div className="p-2 pb-0">
                 <div className="aspect-16/10 relative rounded-[16px] overflow-hidden bg-slate-200 dark:bg-slate-800 animate-pulse">
@@ -26,7 +15,7 @@ export function CourseCardSkeleton({ variant = 'light' }: CourseCardSkeletonProp
             <div className="flex flex-1 flex-col p-5 pt-4">
                 {/* University Pill Placeholder */}
                 <div className="mb-4 flex items-center justify-between gap-2">
-                    <div className="h-7 w-24 rounded-lg bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
+                    <div className="h-9 w-36 rounded-lg bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
                     <div className="h-4 w-16 rounded-md bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
                 </div>
 

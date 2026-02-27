@@ -8,8 +8,6 @@ import Image from 'next/image';
 import { CourseCard } from '@/components/courses/course-card';
 import { CourseCardSkeleton } from '@/components/courses/course-card-skeleton';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
-import { useTheme } from 'next-themes';
 
 interface UniversityDetailsProps {
     universityId: string;
@@ -19,14 +17,6 @@ interface UniversityDetailsProps {
 // Phase 8: V2 Simplification - Direct University → Courses (No Major/Subject layer)
 export function UniversityDetails({ universityId, initialUniversity }: UniversityDetailsProps) {
     const t = useTranslations('courses');
-    const [mounted, setMounted] = useState(false);
-    const { resolvedTheme } = useTheme();
-    const isDark = !mounted || resolvedTheme === 'dark';
-
-    useEffect(() => {
-        const timeoutId = setTimeout(() => setMounted(true), 0);
-        return () => clearTimeout(timeoutId);
-    }, []);
     
     // Fetch Courses directly for university (public endpoint)
     const { data: courses, isLoading: loadingCourses } = useQuery({
@@ -75,7 +65,7 @@ export function UniversityDetails({ universityId, initialUniversity }: Universit
                 {loadingCourses ? (
                     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         {[1, 2, 3].map((i) => (
-                            <CourseCardSkeleton key={i} variant={isDark ? 'dark' : 'light'} />
+                            <CourseCardSkeleton key={i} />
                         ))}
                     </div>
                 ) : courses?.length === 0 ? (
@@ -85,7 +75,7 @@ export function UniversityDetails({ universityId, initialUniversity }: Universit
                 ) : (
                     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         {courses?.map((course) => (
-                            <CourseCard key={course.id} course={course} variant={isDark ? 'dark' : 'light'} />
+                            <CourseCard key={course.id} course={course} />
                         ))}
                     </div>
                 )}
