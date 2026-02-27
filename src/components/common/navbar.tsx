@@ -232,46 +232,121 @@ export function Navbar() {
             {/* Mobile More Sheet */}
             {isMobileMoreOpen && (
                 <div className="fixed inset-x-3 bottom-[5.7rem] z-50 rounded-[1.6rem] border border-slate-100 dark:border-white/10 bg-white/98 dark:bg-slate-900/95 p-3 shadow-2xl shadow-black/40 md:hidden">
-                    <div className="grid grid-cols-2 gap-2">
-                        <div className="col-span-2 inline-flex items-center rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 p-1">
-                            <Link
-                                href="/login"
-                                onClick={() => setIsMobileMoreOpen(false)}
-                                className={cn(
-                                    'flex-1 rounded-lg px-3 py-2.5 text-center text-sm font-semibold transition-all',
-                                    pathname === '/login'
-                                        ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
-                                        : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10'
-                                )}
-                            >
-                                <span className="inline-flex items-center gap-1.5">
-                                    <LogIn className="h-4 w-4" />
-                                    {t('login')}
-                                </span>
-                            </Link>
-                            <Link
-                                href="/register"
-                                onClick={() => setIsMobileMoreOpen(false)}
-                                className={cn(
-                                    'flex-1 rounded-lg px-3 py-2.5 text-center text-sm font-semibold transition-all',
-                                    pathname === '/register'
-                                        ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
-                                        : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10'
-                                )}
-                            >
-                                <span className="inline-flex items-center gap-1.5">
-                                    <UserPlus className="h-4 w-4" />
-                                    {t('register')}
-                                </span>
-                            </Link>
-                        </div>
-                        <button
-                            onClick={toggleLanguage}
-                            className="col-span-2 inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-white/10 px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 transition-all hover:bg-slate-100 dark:hover:bg-white/10"
-                        >
-                            <Languages className="h-4 w-4" />
-                            <span>{locale === 'ar' ? 'English' : 'العربية'}</span>
-                        </button>
+                    <div className="grid gap-2">
+                        {user ? (
+                            <>
+                                {/* User info header */}
+                                <div className="flex items-center gap-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-3 py-3">
+                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-400">
+                                        <User className="h-5 w-5" />
+                                    </div>
+                                    <div className="min-w-0 flex-1">
+                                        <p className="truncate text-sm font-bold text-slate-900 dark:text-white">
+                                            {user.fullName || ''}
+                                        </p>
+                                        <p className="truncate text-xs text-slate-500 dark:text-slate-400">
+                                            {user.email || ''}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Dashboard + Profile links */}
+                                <div className="grid grid-cols-2 gap-2">
+                                    <Link
+                                        href="/dashboard"
+                                        onClick={() => setIsMobileMoreOpen(false)}
+                                        className={cn(
+                                            'flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-white/10 px-3 py-2.5 text-sm font-semibold transition-all',
+                                            pathname === '/dashboard'
+                                                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
+                                                : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10'
+                                        )}
+                                    >
+                                        <LayoutDashboard className="h-4 w-4" />
+                                        {t('dashboard')}
+                                    </Link>
+                                    <Link
+                                        href="/profile"
+                                        onClick={() => setIsMobileMoreOpen(false)}
+                                        className={cn(
+                                            'flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-white/10 px-3 py-2.5 text-sm font-semibold transition-all',
+                                            pathname === '/profile'
+                                                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
+                                                : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10'
+                                        )}
+                                    >
+                                        <User className="h-4 w-4" />
+                                        {t('profile')}
+                                    </Link>
+                                </div>
+
+                                {/* Language toggle */}
+                                <button
+                                    onClick={toggleLanguage}
+                                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-white/10 px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 transition-all hover:bg-slate-100 dark:hover:bg-white/10"
+                                >
+                                    <Languages className="h-4 w-4" />
+                                    <span>{locale === 'ar' ? 'English' : 'العربية'}</span>
+                                </button>
+
+                                {/* Logout */}
+                                <button
+                                    onClick={() => {
+                                        setIsMobileMoreOpen(false);
+                                        logout();
+                                    }}
+                                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-red-200 dark:border-red-500/20 bg-red-50 dark:bg-red-500/10 px-3 py-2.5 text-sm font-semibold text-red-600 dark:text-red-400 transition-all hover:bg-red-100 dark:hover:bg-red-500/20"
+                                >
+                                    <LogOut className="h-4 w-4" />
+                                    {t('logout')}
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                {/* Login / Register pill */}
+                                <div className="inline-flex items-center rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 p-1">
+                                    <Link
+                                        href="/login"
+                                        onClick={() => setIsMobileMoreOpen(false)}
+                                        className={cn(
+                                            'flex-1 rounded-lg px-3 py-2.5 text-center text-sm font-semibold transition-all',
+                                            pathname === '/login'
+                                                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
+                                                : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10'
+                                        )}
+                                    >
+                                        <span className="inline-flex items-center gap-1.5">
+                                            <LogIn className="h-4 w-4" />
+                                            {t('login')}
+                                        </span>
+                                    </Link>
+                                    <Link
+                                        href="/register"
+                                        onClick={() => setIsMobileMoreOpen(false)}
+                                        className={cn(
+                                            'flex-1 rounded-lg px-3 py-2.5 text-center text-sm font-semibold transition-all',
+                                            pathname === '/register'
+                                                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
+                                                : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10'
+                                        )}
+                                    >
+                                        <span className="inline-flex items-center gap-1.5">
+                                            <UserPlus className="h-4 w-4" />
+                                            {t('register')}
+                                        </span>
+                                    </Link>
+                                </div>
+
+                                {/* Language toggle */}
+                                <button
+                                    onClick={toggleLanguage}
+                                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-white/10 px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 transition-all hover:bg-slate-100 dark:hover:bg-white/10"
+                                >
+                                    <Languages className="h-4 w-4" />
+                                    <span>{locale === 'ar' ? 'English' : 'العربية'}</span>
+                                </button>
+                            </>
+                        )}
                     </div>
                 </div>
             )}

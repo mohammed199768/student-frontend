@@ -226,8 +226,8 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 200px;
-  height: 200px;
+  width: 280px;
+  height: 280px;
   transform: translate(-50%, -60%);
   border-radius: 9999px;
   border: 2px solid transparent;
@@ -326,4 +326,19 @@ body {
   border-radius: 0 2px 2px 0;
   box-shadow: 0 0 10px rgba(99, 102, 241, 0.5), 0 0 30px rgba(99, 102, 241, 0.2);
   transition: width 300ms ease-out, opacity 300ms ease;
+}
+
+/* ====================================================
+   PAGE LOADER — in-page T.MANAL loading spinner
+   ==================================================== */
+
+.page-loader__ring {
+  width: 64px;
+  height: 64px;
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--bg-base, #020617), var(--bg-base, #020617)) padding-box,
+    conic-gradient(from 0deg, #6366f1, #a78bfa, #818cf8, #6366f1) border-box;
+  animation: ringRotate 2s linear infinite;
 }

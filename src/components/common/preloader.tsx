@@ -75,7 +75,7 @@ export function Preloader() {
                 <div className="preloader__ring" />
 
                 {/* Brand text */}
-                <div className="preloader__brand">
+                <div className="preloader__brand" dir="ltr">
                     <span className="preloader__brand-t">T.</span>
                     <span className="preloader__brand-manal">MANAL</span>
                 </div>
