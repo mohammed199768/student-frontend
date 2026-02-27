@@ -12,9 +12,9 @@ export function CourseCardSkeleton({ variant = 'light' }: CourseCardSkeletonProp
     const borderClass = isDark ? "border-white/10" : "border-slate-100";
     
     return (
-        <div className={`flex flex-col overflow-hidden rounded-2xl border ${bgClass}`}>
+        <div className={`flex flex-col overflow-hidden rounded-2xl border ${bgClass} shadow-sm`}>
             {/* Thumbnail Placeholder */}
-            <div className="aspect-video relative bg-slate-200/50 dark:bg-slate-800/50 animate-pulse">
+            <div className="aspect-16/10 relative bg-slate-100 dark:bg-slate-800/50 animate-pulse">
                 <div className="absolute inset-0 flex items-center justify-center p-6">
                     <div className="h-8 w-3/4 rounded-md bg-slate-300/50 dark:bg-slate-700/50"></div>
                 </div>
