@@ -25,6 +25,11 @@ export const metadata: Metadata = {
     manifest: '/manifest.webmanifest',
     alternates: {
         canonical: 'https://www.manalalhihi.com',
+        languages: {
+            ar: 'https://www.manalalhihi.com/ar',
+            en: 'https://www.manalalhihi.com/en',
+            'x-default': 'https://www.manalalhihi.com',
+        },
     },
     robots: {
         index: true,

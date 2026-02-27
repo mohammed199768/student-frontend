@@ -47,7 +47,7 @@ export function Footer() {
                     <p className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-300">
                         &copy; 2026 T.MANAL LMS. All rights reserved.
                     </p>
-                    <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
+                    <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-500">
                         Platform developed and engineered by{' '}
                         <span className="font-semibold text-slate-700 dark:text-slate-300">Inkspire</span>
                     </p>
