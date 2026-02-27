@@ -104,7 +104,7 @@ export default async function LocaleLayout({
                 />
             </head>
             <body
-                className="font-sans antialiased h-full bg-slate-50 text-slate-900"
+                className="font-sans antialiased h-full bg-white dark:bg-slate-950 text-slate-900 dark:text-white"
                 suppressHydrationWarning
             >
                 <ThemeProvider>

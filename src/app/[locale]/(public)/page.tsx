@@ -53,7 +53,7 @@ export default async function HomePage() {
     const t = await getTranslations('public.home');
 
     return (
-        <div className="flex min-h-screen flex-col bg-slate-100 dark:bg-slate-900 relative">
+        <div className="flex min-h-screen flex-col bg-white dark:bg-slate-900 relative">
             <BackgroundWrapper />
             <div className="relative z-10 flex min-h-screen flex-col">
                 <Navbar />
@@ -81,17 +81,17 @@ export default async function HomePage() {
                     {/* Featured Courses */}
                     <section className="relative py-24 z-10">
                         {/* Grid Pattern 2 */}
-                        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-size-[24px_24px] pointer-events-none"></div>
+                        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-size-[24px_24px] pointer-events-none opacity-0 dark:opacity-100"></div>
 
                         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
                             <div className="flex items-end justify-between mb-12">
                                 <div>
                                     <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white sm:text-4xl">
-                                        <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-cyan-400">
+                                        <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-600 to-indigo-400 dark:from-indigo-400 dark:to-cyan-400">
                                             {t('featured_title')}
                                         </span>
                                     </h2>
-                                    <p className="mt-4 text-lg text-slate-500 dark:text-slate-400">{t('featured_subtitle')}</p>
+                                    <p className="mt-4 text-lg text-slate-600 dark:text-slate-400">{t('featured_subtitle')}</p>
                                 </div>
                                 <Link href="/courses" className="hidden sm:inline-flex items-center text-indigo-400 font-bold hover:text-indigo-300 hover:underline">
                                     {t('view_all_courses')} <ArrowRight className="ml-2 h-4 w-4 rtl:rotate-180" />
@@ -104,7 +104,7 @@ export default async function HomePage() {
                                         <CourseCard key={course.id} course={course} variant="dark" />
                                     ))
                                 ) : (
-                                    <div className="col-span-full py-16 text-center bg-slate-100 dark:bg-white/5 rounded-3xl border border-dashed border-slate-200 dark:border-white/10 backdrop-blur-sm">
+                                    <div className="col-span-full py-16 text-center bg-slate-50 dark:bg-white/5 rounded-3xl border border-dashed border-slate-200 dark:border-white/10 backdrop-blur-sm">
                                         <BookOpen className="h-16 w-16 text-slate-500 mx-auto mb-4" />
                                         <h3 className="text-xl font-bold text-slate-900 dark:text-white">{t('no_courses')}</h3>
                                         <p className="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mt-2">{t('no_courses_desc')}</p>

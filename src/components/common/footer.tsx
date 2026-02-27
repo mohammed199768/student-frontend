@@ -7,7 +7,7 @@ export function Footer() {
     const tc = useTranslations('common');
 
     return (
-        <footer className="border-t border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-slate-950 py-12 relative z-10">
+        <footer className="border-t border-slate-100 dark:border-white/5 bg-white dark:bg-slate-950 py-12 relative z-10">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
                     <div className="col-span-1 md:col-span-2">
@@ -26,15 +26,15 @@ export function Footer() {
                         </p>
                     </div>
                     <div>
-                        <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">{t('links_title')}</h3>
+                        <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-800 dark:text-white">{t('links_title')}</h3>
                         <ul className="mt-4 space-y-2">
                             <li>
-                                <Link href="/courses" className="text-slate-600 dark:text-slate-300 hover:text-indigo-400 transition-colors">
+                                <Link href="/courses" className="text-slate-500 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                                     {tc('courses')}
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/contact" className="text-slate-600 dark:text-slate-300 hover:text-indigo-400 transition-colors">
+                                <Link href="/contact" className="text-slate-500 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                                     {tc('contact')}
                                 </Link>
                             </li>
@@ -42,12 +42,12 @@ export function Footer() {
                     </div>
                 </div>
                 <div className="mt-12 border-t border-slate-100 dark:border-white/5 pt-8 text-center">
-                    <p className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300">
+                    <p className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-300">
                         &copy; 2026 T.MANAL LMS. All rights reserved.
                     </p>
-                    <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+                    <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
                         Platform developed and engineered by{' '}
-                        <span className="font-semibold text-slate-600 dark:text-slate-300">Inkspire</span>
+                        <span className="font-semibold text-slate-700 dark:text-slate-300">Inkspire</span>
                     </p>
                 </div>
             </div>

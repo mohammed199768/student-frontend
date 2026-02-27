@@ -78,7 +78,7 @@ export default function RegisterPage() {
         <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-950 p-4">
             <div className="w-full max-w-md">
                 <div className="mb-8 text-center">
-                    <Link href="/" className="inline-flex items-center text-indigo-600 font-bold mb-4 hover:underline">
+                    <Link href="/" className="inline-flex items-center text-indigo-600 dark:text-indigo-400 font-bold mb-4 hover:underline">
                         <ArrowLeft className="mr-2 h-4 w-4 rtl:rotate-180" /> {t('back_home')}
                     </Link>
                     <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">
@@ -89,7 +89,7 @@ export default function RegisterPage() {
                     </p>
                 </div>
 
-                <div className="rounded-3xl bg-white dark:bg-slate-800 p-8 shadow-xl shadow-slate-200 dark:shadow-slate-950/30 border border-slate-100 dark:border-slate-700">
+                <div className="rounded-3xl bg-white dark:bg-slate-800/80 p-8 shadow-xl shadow-slate-200/60 dark:shadow-slate-950/30 border border-slate-100 dark:border-slate-700/50">
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
@@ -159,7 +159,7 @@ export default function RegisterPage() {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="flex w-full items-center justify-center rounded-2xl bg-indigo-600 py-4 font-bold text-white shadow-lg shadow-indigo-100 transition-all hover:bg-indigo-700 disabled:opacity-50"
+                            className="flex w-full items-center justify-center rounded-2xl bg-indigo-600 py-4 font-bold text-white shadow-lg shadow-indigo-200 dark:shadow-indigo-900/20 transition-all hover:bg-indigo-700 disabled:opacity-50"
                         >
                             {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : t('create_account')}
                         </button>
@@ -176,3 +176,4 @@ export default function RegisterPage() {
         </div>
     );
 }
+

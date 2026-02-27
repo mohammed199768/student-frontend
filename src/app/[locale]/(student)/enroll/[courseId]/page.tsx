@@ -104,7 +104,7 @@ export default function EnrollmentPage() {
                         <div className="mb-8 flex items-center gap-6 rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm">
                             {/* Placeholder Box - No Images Policy */}
                             <div className="relative h-24 w-40 rounded-2xl overflow-hidden shrink-0 hidden sm:flex items-center justify-center bg-linear-to-br from-indigo-600 to-indigo-800">
-                                <h4 className="text-white font-bold text-sm text-center px-2 line-clamp-2">
+                                <h4 className="text-white dark:text-white font-bold text-sm text-center px-2 line-clamp-2">
                                     {course.title}
                                 </h4>
                             </div>
@@ -181,3 +181,4 @@ export default function EnrollmentPage() {
         </div>
     );
 }
+

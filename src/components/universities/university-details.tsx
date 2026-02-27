@@ -8,6 +8,8 @@ import Image from 'next/image';
 import { CourseCard } from '@/components/courses/course-card';
 import { CourseCardSkeleton } from '@/components/courses/course-card-skeleton';
 import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
 
 interface UniversityDetailsProps {
     universityId: string;
@@ -17,6 +19,13 @@ interface UniversityDetailsProps {
 // Phase 8: V2 Simplification - Direct University → Courses (No Major/Subject layer)
 export function UniversityDetails({ universityId, initialUniversity }: UniversityDetailsProps) {
     const t = useTranslations('courses');
+    const [mounted, setMounted] = useState(false);
+    const { resolvedTheme } = useTheme();
+    const isDark = !mounted || resolvedTheme === 'dark';
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
     
     // Fetch Courses directly for university (public endpoint)
     const { data: courses, isLoading: loadingCourses } = useQuery({
@@ -30,8 +39,8 @@ export function UniversityDetails({ universityId, initialUniversity }: Universit
     return (
         <div className="space-y-12">
             {/* Header / Hero */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 p-8 lg:p-12 text-white">
-                <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl"></div>
+            <div className="relative overflow-hidden rounded-3xl bg-white dark:bg-slate-900 p-8 lg:p-12 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl opacity-[0.08] dark:opacity-100"></div>
                 <div className="relative z-10 flex flex-col items-center gap-8 lg:flex-row">
                     <div className="relative h-24 w-24 overflow-hidden rounded-2xl bg-white p-2">
                         {(initialUniversity.logoUrl || initialUniversity.logo) ? (
@@ -48,7 +57,7 @@ export function UniversityDetails({ universityId, initialUniversity }: Universit
                     </div>
                     <div className="text-center lg:text-right">
                         <h1 className="text-3xl font-extrabold lg:text-5xl">{initialUniversity.name}</h1>
-                        <p className="mt-4 text-slate-400">{t('university_subtitle')}</p>
+                        <p className="mt-4 text-slate-500 dark:text-slate-400">{t('university_subtitle')}</p>
                     </div>
                 </div>
             </div>
@@ -56,8 +65,8 @@ export function UniversityDetails({ universityId, initialUniversity }: Universit
             {/* Courses Grid - Direct display without Major/Subject selection */}
             <div className="space-y-8">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-2xl font-extrabold text-white">{t('available_courses')}</h2>
-                    <span className="rounded-full bg-white/5 px-4 py-1 text-sm text-slate-400">
+                    <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">{t('available_courses')}</h2>
+                    <span className="rounded-full border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-1 text-sm text-slate-500 dark:text-slate-400">
                         {courses?.length || 0} {t('course_count_suffix')}
                     </span>
                 </div>
@@ -65,17 +74,17 @@ export function UniversityDetails({ universityId, initialUniversity }: Universit
                 {loadingCourses ? (
                     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         {[1, 2, 3].map((i) => (
-                            <CourseCardSkeleton key={i} variant="dark" />
+                            <CourseCardSkeleton key={i} variant={isDark ? 'dark' : 'light'} />
                         ))}
                     </div>
                 ) : courses?.length === 0 ? (
-                    <div className="flex h-64 items-center justify-center rounded-3xl bg-slate-900/50 text-slate-500">
+                    <div className="flex h-64 items-center justify-center rounded-3xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400">
                         {t('no_university_courses')}
                     </div>
                 ) : (
                     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         {courses?.map((course) => (
-                            <CourseCard key={course.id} course={course} variant="dark" />
+                            <CourseCard key={course.id} course={course} variant={isDark ? 'dark' : 'light'} />
                         ))}
                     </div>
                 )}

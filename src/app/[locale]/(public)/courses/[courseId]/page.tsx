@@ -40,17 +40,17 @@ export default async function CourseDetailPage({ params }: PageProps) {
     if (!course) return notFound();
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-24 md:pb-20">
+        <div className="min-h-screen bg-white dark:bg-slate-950 pb-24 md:pb-20">
             <Navbar />
             {/* --- Hero Section --- */}
-            <div className="relative bg-slate-100 dark:bg-slate-900 border-b border-slate-100 dark:border-white/5 pt-12 pb-12 lg:pt-20 lg:pb-24">
+            <div className="relative bg-slate-50 dark:bg-slate-900 border-b border-slate-100 dark:border-white/5 pt-12 pb-12 lg:pt-20 lg:pb-24">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid lg:grid-cols-12 gap-12">
                         {/* Left Column (Content) */}
                         <div className="lg:col-span-8 space-y-8 order-2 lg:order-1">
                             {/* Breadcrumb / Badge */}
-                            <div className="flex items-center gap-2 text-sm text-slate-400">
-                                <Link href="/courses" className="hover:text-white transition-colors">الدورات</Link>
+                            <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                                <Link href="/courses" className="transition-colors hover:text-indigo-600 dark:hover:text-indigo-400">الدورات</Link>
                                 <span>/</span>
                                 <span className="text-indigo-400">{course.subject?.major?.name || 'General'}</span>
                                 {course.isFeatured && (
@@ -63,16 +63,16 @@ export default async function CourseDetailPage({ params }: PageProps) {
 
                             {/* Title & Description */}
                             <div>
-                                <h1 className="text-3xl lg:text-5xl font-bold text-white mb-6 leading-tight">
+                                <h1 className="text-3xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
                                     {course.title}
                                 </h1>
-                                <p className="text-lg text-slate-300 leading-relaxed max-w-3xl">
+                                <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl">
                                     {course.description || "No description available."}
                                 </p>
                             </div>
 
                             {/* Meta Stats */}
-                            <div className="flex flex-wrap items-center gap-6 text-sm text-slate-400">
+                            <div className="flex flex-wrap items-center gap-6 text-sm text-slate-500 dark:text-slate-400">
                                 <div className="flex items-center gap-2">
                                     <User className="w-4 h-4" />
                                     <span>{course.instructor?.firstName} {course.instructor?.lastName}</span>
@@ -99,7 +99,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
                     <div className="lg:col-span-4 lg:start-9 order-1 lg:order-2">
                         <div className="sticky top-24 space-y-6">
                             {/* Course Enrollment Card */}
-                            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 overflow-hidden shadow-2xl">
+                            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 overflow-hidden shadow-sm">
                                 {/* Preview Video / Thumbnail */}
                                 <CoursePreviewPlayer
                                     title={course.title}
@@ -109,7 +109,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
                                 {/* Card Body */}
                                 <div className="p-6">
                                     <div className="flex items-baseline gap-2 mb-6">
-                                        <span className="text-3xl font-bold text-white">
+                                        <span className="text-3xl font-bold text-slate-900 dark:text-white">
                                             {formatPrice(Number(course.price))}
                                         </span>
                                         {course.salePrice && (
@@ -126,20 +126,20 @@ export default async function CourseDetailPage({ params }: PageProps) {
                                         >
                                             اشترك الآن
                                         </Link>
-                                        <p className="text-xs text-center text-slate-400">
+                                        <p className="text-xs text-center text-slate-500 dark:text-slate-400">
                                             ضمان استرجاع الأموال لمدة 30 يوماً
                                         </p>
                                     </div>
 
                                     <div className="mt-8 space-y-4">
-                                        <h4 className="font-bold text-white text-sm">ماذا يغطي هذا الكورس:</h4>
+                                        <h4 className="font-bold text-slate-900 dark:text-white text-sm">ماذا يغطي هذا الكورس:</h4>
                                         <ul className="space-y-3">
-                                            <li className="flex gap-3 text-sm text-slate-300">
+                                            <li className="flex gap-3 text-sm text-slate-600 dark:text-slate-300">
                                                 <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />
                                                 <span>وصول كامل مدى الحياة</span>
                                             </li>
 
-                                            <li className="flex gap-3 text-sm text-slate-300">
+                                            <li className="flex gap-3 text-sm text-slate-600 dark:text-slate-300">
                                                 <BookOpen className="w-4 h-4 text-green-500 shrink-0" />
                                                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                                                 <span>{t('educational_lessons', { count: course.lectures?.reduce((acc: number, l: any) => acc + l.parts.length, 0) || 0 })}</span>
@@ -147,9 +147,9 @@ export default async function CourseDetailPage({ params }: PageProps) {
                                         </ul>
                                     </div>
 
-                                    <div className="mt-6 pt-6 border-t border-white/5 flex justify-between items-center">
-                                        <button className="text-sm font-bold text-slate-400 hover:text-white transition-colors">مشاركة</button>
-                                        <span className="text-xs text-slate-500">كود الدورة: {String(course.id).slice(0, 8)}</span>
+                                    <div className="mt-6 pt-6 border-t border-slate-100 dark:border-white/5 flex justify-between items-center">
+                                        <button className="text-sm font-bold text-slate-500 dark:text-slate-400 transition-colors hover:text-indigo-600 dark:hover:text-indigo-400">مشاركة</button>
+                                        <span className="text-xs text-slate-500 dark:text-slate-400">كود الدورة: {String(course.id).slice(0, 8)}</span>
                                     </div>
                                 </div>
                             </div>
@@ -160,9 +160,9 @@ export default async function CourseDetailPage({ params }: PageProps) {
                     <div className="lg:col-span-8 space-y-12 order-2 lg:order-1 lg:pt-12">
 
                         {/* Syllabus / Content */}
-                        <div className="bg-slate-900/50 border border-white/5 rounded-2xl p-6 lg:p-8">
-                            <h2 className="text-2xl font-bold text-white mb-6">{t('curriculum')}</h2>
-                            <div className="flex items-center justify-between text-sm text-slate-400 mb-6">
+                        <div className="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-white/10 p-6">
+                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">{t('curriculum')}</h2>
+                            <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400 mb-6">
                                 {/* V2 Logic: Count Lectures as Sections, Parts as Lessons */}
                                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                                 <span>{course.lectures?.length || 0} {t('sections')} • {course.lectures?.reduce((acc: number, l: any) => acc + l.parts.length, 0) || 0} {t('parts')}</span>
@@ -172,28 +172,28 @@ export default async function CourseDetailPage({ params }: PageProps) {
 
                             <div className="space-y-4">
                                 {course.lectures?.map((lecture: any) => (
-                                    <div key={lecture.id} className="border border-white/5 rounded-xl overflow-hidden bg-slate-950/30">
-                                        <div className="bg-slate-900/80 px-4 py-3 border-b border-white/5 flex justify-between items-center">
-                                            <h3 className="font-bold text-slate-200">{lecture.title}</h3>
-                                            <span className="text-xs text-slate-500">{lecture.parts?.length} {t('lessons')}</span>
+                                    <div key={lecture.id} className="rounded-2xl overflow-hidden bg-slate-50 dark:bg-slate-800/30 border border-slate-200 dark:border-white/10">
+                                        <div className="bg-slate-50 dark:bg-slate-800/30 px-4 py-3 border-b border-slate-100 dark:border-white/10 flex justify-between items-center">
+                                            <h3 className="font-bold text-slate-900 dark:text-slate-200">{lecture.title}</h3>
+                                            <span className="text-xs text-slate-500 dark:text-slate-400">{lecture.parts?.length} {t('lessons')}</span>
                                         </div>
-                                        <div className="divide-y divide-white/5">
+                                        <div className="divide-y divide-slate-100 dark:divide-slate-800/50">
                                             {lecture.parts?.map((part: any) => {
                                                 // V2: Check if part has previewable assets? Schema doesn't expose isPreview on Part yet.
                                                 // Defaulting to locked until proven otherwise.
                                                 const isPreview = false; 
                                                 
                                                 return (
-                                                    <div key={part.id} className="px-4 py-3 flex items-center justify-between hover:bg-white/5 transition-colors group">
+                                                    <div key={part.id} className="px-4 py-3 flex items-center justify-between hover:bg-white/60 dark:hover:bg-white/5 transition-colors group">
                                                         <div className="flex items-center gap-3">
                                                             {isPreview ? (
                                                                 <div className="w-6 h-6 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-all">
                                                                     <Play className="w-3 h-3 fill-current" />
                                                                 </div>
                                                             ) : (
-                                                                <Lock className="w-4 h-4 text-slate-600" />
+                                                                <Lock className="w-4 h-4 text-slate-400 dark:text-slate-700" />
                                                             )}
-                                                            <span className={isPreview ? "text-slate-200" : "text-slate-400"}>
+                                                            <span className={isPreview ? "text-slate-900 dark:text-slate-200" : "text-slate-500 dark:text-slate-400"}>
                                                                 {part.title}
                                                             </span>
                                                         </div>
@@ -215,20 +215,20 @@ export default async function CourseDetailPage({ params }: PageProps) {
                         </div>
 
                         {/* Instructor */}
-                        <div className="bg-slate-900/50 border border-white/5 rounded-2xl p-6 lg:p-8">
-                            <h2 className="text-2xl font-bold text-white mb-6">عن المحاضر</h2>
+                        <div className="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-white/10 p-6">
+                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">عن المحاضر</h2>
                             <div className="flex items-start gap-6">
-                                <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-slate-700 shrink-0 bg-indigo-600 flex items-center justify-center">
-                                    <span className="text-2xl font-bold text-white">
+                                <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-slate-200 dark:border-slate-700 shrink-0 bg-indigo-600 flex items-center justify-center">
+                                    <span className="text-2xl font-bold text-white dark:text-white">
                                         {course.instructor?.firstName?.[0] || 'M'}{course.instructor?.lastName?.[0] || ''}
                                     </span>
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-white mb-1">
+                                    <h3 className="text-slate-900 dark:text-white font-bold text-xl mb-1">
                                         {course.instructor?.firstName} {course.instructor?.lastName}
                                     </h3>
                                     <p className="text-indigo-400 text-sm mb-4">Senior Instructor</p>
-                                        <div className="prose prose-sm dark:prose-invert text-slate-400">
+                                        <div className="prose prose-sm dark:prose-invert text-slate-600 dark:text-slate-400">
                                             {/* Bio from DB */}
                                             {course.instructor?.bio || t('no_bio')}
                                         </div>
@@ -242,4 +242,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
         </div>
     );
 }
+
+
+
 

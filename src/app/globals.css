@@ -5,13 +5,13 @@
 
 :root {
   --bg-base:        #ffffff;
-  --bg-surface:     #f8fafc;
+  --bg-surface:     #ffffff;
   --bg-card:        #ffffff;
-  --bg-muted:       #f1f5f9;
-  --bg-overlay:     rgba(255, 255, 255, 0.8);
+  --bg-muted:       #f8fafc;
+  --bg-overlay:     rgba(255, 255, 255, 0.92);
 
   --text-base:      #0f172a;
-  --text-muted:     #64748b;
+  --text-muted:     #475569;
   --text-subtle:    #94a3b8;
 
   --brand:          #4f46e5;
@@ -20,9 +20,9 @@
   --border:         #e2e8f0;
   --border-subtle:  #f1f5f9;
 
-  --success:        #22c55e;
-  --error:          #ef4444;
-  --warning:        #f59e0b;
+  --success:        #16a34a;
+  --error:          #dc2626;
+  --warning:        #d97706;
 }
 
 .dark {
@@ -82,14 +82,6 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-body.bg-slate-50 {
-  background: var(--bg-base);
-}
-
-body.text-slate-900 {
-  color: var(--text-base);
 }
 
 :focus-visible {

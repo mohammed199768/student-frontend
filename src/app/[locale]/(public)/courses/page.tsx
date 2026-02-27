@@ -55,7 +55,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
     const t = await getTranslations('courses');
 
     return (
-        <div className="flex min-h-screen flex-col bg-slate-50 dark:bg-slate-950">
+        <div className="flex min-h-screen flex-col bg-white dark:bg-slate-950">
             <Navbar />
 
             <main className="flex-1 py-12 pb-24 md:pb-12">
@@ -65,15 +65,15 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                         <p className="mt-4 text-lg text-slate-600 dark:text-slate-300">{t('page_subtitle')}</p>
                     </div>
 
-                    <section className="mb-8 rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm">
+                    <section className="mb-8 rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 p-5 shadow-sm">
                         <h3 className="mb-4 text-base font-bold text-slate-900 dark:text-white">{t('university_label')}</h3>
                         <div className="flex flex-wrap gap-2">
                             <Link
                                 href="/courses"
                                 prefetch={false}
-                                className={`rounded-full border px-4 py-2 text-sm font-bold transition-all focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 ${!universityId
-                                    ? 'border-indigo-600 bg-indigo-600 text-white'
-                                    : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600'
+                                className={`rounded-full px-4 py-2 text-sm font-bold transition-all focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 ${!universityId
+                                    ? 'border border-indigo-600 bg-indigo-600 text-white'
+                                    : 'border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 hover:border-indigo-300 dark:hover:bg-slate-600 hover:text-indigo-600'
                                     }`}
                             >
                                 {t('all_universities')}
@@ -83,9 +83,9 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                                     key={uni.id}
                                     href={`/courses?universityId=${uni.id}`}
                                     prefetch={false}
-                                    className={`rounded-full border px-4 py-2 text-sm font-bold transition-all focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 ${universityId === uni.id
-                                        ? 'border-indigo-600 bg-indigo-600 text-white'
-                                        : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600'
+                                    className={`rounded-full px-4 py-2 text-sm font-bold transition-all focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 ${universityId === uni.id
+                                        ? 'border border-indigo-600 bg-indigo-600 text-white'
+                                        : 'border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 hover:border-indigo-300 dark:hover:bg-slate-600 hover:text-indigo-600'
                                         }`}
                                 >
                                     {uni.name}
@@ -102,8 +102,8 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                                 ))}
                             </div>
                         ) : (
-                            <div className="flex flex-col items-center justify-center py-16 px-4 text-center rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm">
-                                <Search className="mb-4 h-12 w-12 text-slate-600 dark:text-slate-300" />
+                            <div className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 shadow-sm flex flex-col items-center justify-center py-16 px-4 text-center">
+                                <Search className="mb-4 h-12 w-12 text-slate-300 dark:text-slate-600" />
                                 <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No courses available yet</h3>
                                 <p className="text-slate-500 dark:text-slate-400 mb-6 max-w-sm">Please try another filter.</p>
                                 <Link 

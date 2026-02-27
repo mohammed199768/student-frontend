@@ -32,8 +32,8 @@ export function BackgroundWrapper() {
     const isSafari = detectSafari();
     const isDark = !mounted || resolvedTheme === 'dark';
     const backgroundClass = isDark
-        ? 'bg-linear-to-br from-slate-900 via-slate-900 to-slate-900'
-        : 'bg-linear-to-br from-white via-indigo-50/30 to-slate-50';
+        ? 'bg-slate-950'
+        : 'bg-white';
 
     useEffect(() => setMounted(true), []);
 
@@ -81,16 +81,16 @@ export function BackgroundWrapper() {
     return (
         <div className={`fixed inset-0 z-0 pointer-events-none overflow-hidden ${backgroundClass}`}>
             {/* Background Gradients & Effects */}
-            <div className={`absolute top-0 right-0 -translate-y-12 translate-x-12 h-[600px] w-[600px] rounded-full bg-indigo-600/20 blur-[48px] opacity-40 ${blendClass} ${blobAnimationClass}`.trim()}></div>
-            <div className={`absolute bottom-0 left-0 -translate-x-12 translate-y-24 h-[600px] w-[600px] rounded-full bg-purple-600/20 blur-[48px] opacity-40 ${blendClass} ${blobAnimationClass} ${prefersReducedMotion ? '' : 'animation-delay-2000'}`.trim()}></div>
-            <div className="absolute top-1/2 left-1/2 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-100/80 dark:bg-slate-800/80 blur-[48px] opacity-30"></div>
+            <div className={`absolute top-0 right-0 -translate-y-12 translate-x-12 h-[600px] w-[600px] rounded-full bg-indigo-600/20 blur-[48px] ${isDark ? 'opacity-40' : 'opacity-[0.04]'} ${blendClass} ${blobAnimationClass}`.trim()}></div>
+            <div className={`absolute bottom-0 left-0 -translate-x-12 translate-y-24 h-[600px] w-[600px] rounded-full bg-purple-600/20 blur-[48px] ${isDark ? 'opacity-40' : 'opacity-[0.04]'} ${blendClass} ${blobAnimationClass} ${prefersReducedMotion ? '' : 'animation-delay-2000'}`.trim()}></div>
+            <div className={`absolute top-1/2 left-1/2 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white dark:bg-slate-800/30 blur-[48px] ${isDark ? 'opacity-40' : 'opacity-[0.04]'}`}></div>
 
             {/* Animated Particles */}
             <div className="absolute inset-0">
                 {particles.map((p, i) => (
                     <motion.div
                         key={i}
-                        className="absolute bg-slate-300/30 dark:bg-white/10 rounded-full"
+                        className="absolute bg-indigo-200/20 dark:bg-white/10 rounded-full"
                         style={{
                             width: p.w,
                             height: p.h,
@@ -111,7 +111,7 @@ export function BackgroundWrapper() {
             </div>
 
             {/* Grid Pattern */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px]"></div>
+            <div className={`absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px] ${isDark ? 'opacity-[0.15]' : 'opacity-[0.03]'}`}></div>
         </div>
     );
 }

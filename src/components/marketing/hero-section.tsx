@@ -20,7 +20,7 @@ export function HeroSection() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="inline-flex items-center gap-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 px-5 py-2 text-sm font-medium text-indigo-300 mb-8 hover:bg-indigo-500/20 transition-colors"
+                        className="inline-flex items-center gap-2 rounded-full bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 px-5 py-2 text-sm font-medium text-indigo-600 dark:text-indigo-300 mb-8 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-colors"
                     >
                         <span className="flex h-2 w-2 relative">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
@@ -38,7 +38,7 @@ export function HeroSection() {
                     >
                         {t('hero_headline_1')}
                         <br />
-                        <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-300 via-white to-indigo-300 animate-gradient-x">
+                        <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-500 via-indigo-400 to-indigo-600 dark:from-indigo-300 dark:via-white dark:to-indigo-300 animate-gradient-x">
                             {t('hero_headline_2')}
                         </span>
                     </motion.h1>
@@ -59,7 +59,7 @@ export function HeroSection() {
                         </Link>
                         <Link
                             href="/courses"
-                            className="w-full sm:w-auto px-8 py-5 rounded-2xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold text-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all hover:scale-105 active:scale-95 flex items-center justify-center"
+                            className="w-full sm:w-auto px-8 py-5 rounded-2xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold text-lg border-2 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:bg-slate-700 transition-all hover:scale-105 active:scale-95 flex items-center justify-center"
                         >
                             <Play className="w-5 h-5 ml-2 fill-current" />
                             {t('hero_cta_secondary')}
@@ -74,9 +74,9 @@ export function HeroSection() {
                         className="relative w-full max-w-6xl mx-auto perspective-1000 group"
                     >
                         {/* Main Dashboard Frame */}
-                        <div className="relative bg-slate-100 dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden aspect-video md:aspect-21/9">
+                        <div className="relative bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden aspect-video md:aspect-21/9">
                             {/* Browser Header */}
-                            <div className="absolute top-0 inset-x-0 h-10 bg-slate-100/80 dark:bg-slate-950/50 border-b border-slate-100 dark:border-white/5 flex items-center px-4 gap-2 z-10 backdrop-blur-md">
+                            <div className="absolute top-0 inset-x-0 h-10 bg-white/90 dark:bg-slate-950/50 border-b border-slate-100 dark:border-white/5 flex items-center px-4 gap-2 z-10 backdrop-blur-md">
                                 <div className="flex gap-2">
                                     <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
                                     <div className="w-3 h-3 rounded-full bg-amber-500/20 border border-amber-500/50"></div>
@@ -99,7 +99,7 @@ export function HeroSection() {
                             />
 
                             {/* Overlay Gradient */}
-                            <div className="absolute inset-0 bg-linear-to-t from-slate-100 dark:from-slate-900 via-transparent to-transparent z-0"></div>
+                            <div className="absolute inset-0 bg-linear-to-t from-white dark:from-slate-900 via-transparent to-transparent z-0"></div>
                         </div>
 
 
@@ -137,7 +137,7 @@ export function HeroSection() {
                         </motion.div>
 
                         {/* Bottom Glow */}
-                        <div className="absolute -inset-4 bg-indigo-500/20 rounded-[2.5rem] blur-3xl -z-10 opacity-50"></div>
+                        <div className="absolute -inset-4 bg-indigo-500/20 rounded-[2.5rem] blur-3xl -z-10 opacity-[0.08] dark:opacity-50"></div>
                     </motion.div>
                 </div>
             </div>

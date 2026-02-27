@@ -38,7 +38,7 @@ export function CoursePreviewPlayer({ title, trailerId }: CoursePreviewPlayerPro
         >
             {/* Title Placeholder - No Images */}
             <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-white font-bold text-xl text-center px-6 line-clamp-2 drop-shadow-md">
+                <h3 className="text-white dark:text-white font-bold text-xl text-center px-6 line-clamp-2 drop-shadow-md">
                     {(title && title !== 'TITLE') ? title : 'Untitled course'}
                 </h3>
             </div>
@@ -56,10 +56,11 @@ export function CoursePreviewPlayer({ title, trailerId }: CoursePreviewPlayerPro
 
             {trailerId && (
                 <div className="absolute bottom-4 left-0 right-0 text-center">
-                    <span className="text-white font-bold text-sm drop-shadow-md">مشاهدة المقدمة</span>
+                    <span className="text-white dark:text-white font-bold text-sm drop-shadow-md">مشاهدة المقدمة</span>
                 </div>
             )}
         </div>
     );
 }
+
 

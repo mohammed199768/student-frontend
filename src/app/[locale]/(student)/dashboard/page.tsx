@@ -27,7 +27,7 @@ export default function DashboardPage() {
     });
 
     return (
-        <div className="flex min-h-screen flex-col bg-slate-50 dark:bg-slate-950">
+        <div className="flex min-h-screen flex-col bg-white dark:bg-slate-950">
             <Navbar />
 
             <main className="flex-1 py-12">
@@ -38,7 +38,7 @@ export default function DashboardPage() {
                             <p className="mt-2 text-lg text-slate-500 dark:text-slate-400">{t('welcome_subtitle')}</p>
                         </div>
 
-                        <div className="flex divide-x divide-slate-200 dark:divide-slate-800 rtl:divide-x-reverse rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-2 shadow-sm">
+                        <div className="flex divide-x divide-slate-100 dark:divide-slate-800 rtl:divide-x-reverse rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 p-2 shadow-sm">
                             <div className="px-6 py-2 text-center">
                                 <p className="text-2xl font-bold text-slate-900 dark:text-white">{courses.length}</p>
                                 <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('stat_enrolled')}</p>
@@ -61,7 +61,7 @@ export default function DashboardPage() {
                                     <input
                                         type="text"
                                         placeholder={t('search_placeholder')}
-                                        className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 py-2 pl-9 pr-4 text-sm text-slate-900 dark:text-white focus:border-indigo-600 focus:outline-none rtl:pr-9 rtl:pl-4"
+                                        className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 py-2 pl-9 pr-4 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none rtl:pr-9 rtl:pl-4"
                                     />
                                 </div>
                             </div>
@@ -69,22 +69,22 @@ export default function DashboardPage() {
                             {isLoading ? (
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     {[1, 2, 3, 4].map(i => (
-                                        <div key={i} className="h-64 rounded-3xl bg-white dark:bg-slate-800 shadow-sm animate-pulse"></div>
+                                        <div key={i} className="h-64 rounded-3xl bg-white dark:bg-slate-800/50 shadow-sm animate-pulse"></div>
                                     ))}
                                 </div>
                             ) : courses.length > 0 ? (
                                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                                     {courses.map((course) => (
-                                        <div key={course.id} className="group overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 transition-all hover:shadow-lg">
+                                        <div key={course.id} className="group overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 transition-all hover:shadow-md hover:shadow-slate-100 dark:hover:shadow-black/20">
                                             <div className="relative aspect-video overflow-hidden">
                                                 {/* Placeholder Box - No Images Policy */}
                                                 <div className="absolute inset-0 flex items-center justify-center bg-linear-to-br from-indigo-600 to-indigo-800 transition-all group-hover:from-indigo-500 group-hover:to-indigo-700">
-                                                    <h3 className="text-white font-bold text-lg text-center px-4 line-clamp-2 drop-shadow-md">
+                                                    <h3 className="text-white dark:text-white font-bold text-lg text-center px-4 line-clamp-2 drop-shadow-md">
                                                         {course.title}
                                                     </h3>
                                                 </div>
                                                 <div className="absolute bottom-4 right-4 left-4 z-10">
-                                                    <div className="flex items-center gap-2 text-xs text-white font-medium lowercase">
+                                                    <div className="flex items-center gap-2 text-xs text-white dark:text-white font-medium lowercase">
                                                         <ProgressBar value={course.progress?.percentage || 0} className="h-1.5 flex-1 bg-white/20" />
                                                         <span>{course.progress?.percentage || 0}% {t('completed')}</span>
                                                     </div>
@@ -97,7 +97,7 @@ export default function DashboardPage() {
                                                 </div>
                                                 <Link
                                                     href={`/learn/${course.id}`}
-                                                    className="rounded-xl bg-slate-100 dark:bg-slate-900 px-6 py-2.5 text-sm font-bold text-slate-900 dark:text-white transition-all hover:bg-indigo-600 hover:text-white"
+                                                    className="rounded-xl bg-slate-100 dark:bg-slate-900 px-6 py-2.5 text-sm font-bold text-slate-800 dark:text-white transition-all hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-600"
                                                 >
                                                     {t('continue_learning')}
                                                 </Link>
@@ -106,8 +106,8 @@ export default function DashboardPage() {
                                     ))}
                                 </div>
                             ) : (
-                                <div className="flex h-96 flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-8 text-center">
-                                    <BookOpen className="h-16 w-16 text-slate-700 dark:text-slate-200 mb-6" />
+                                <div className="flex h-96 flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 p-8 text-center">
+                                    <BookOpen className="h-16 w-16 text-slate-300 dark:text-slate-600 mb-6" />
                                     <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{t('no_courses_title')}</h3>
                                     <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-sm">{t('no_courses_desc')}</p>
                                     <Link
@@ -127,3 +127,4 @@ export default function DashboardPage() {
         </div>
     );
 }
+
