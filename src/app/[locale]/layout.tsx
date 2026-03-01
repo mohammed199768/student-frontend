@@ -75,19 +75,10 @@ export async function generateMetadata({
 }: {
     params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-    const { locale } = await params;
-    const canonicalLocale = locale === 'ar' ? 'ar' : 'en';
+    await params;
 
     return {
         ...metadataBaseConfig,
-        alternates: {
-            canonical: `https://www.manalalhihi.com/${canonicalLocale}`,
-            languages: {
-                ar: 'https://www.manalalhihi.com/ar',
-                en: 'https://www.manalalhihi.com/en',
-                'x-default': 'https://www.manalalhihi.com',
-            },
-        },
     };
 }
 

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Navbar } from '@/components/common/navbar';
 import { Footer } from '@/components/common/footer';
 import { CourseCard } from '@/components/courses/course-card';
@@ -13,6 +14,25 @@ interface CoursesPageProps {
 }
 
 const PUBLIC_API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/+$/, '');
+
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+    const { locale } = await params;
+    const safeLocale = locale === 'ar' ? 'ar' : 'en';
+
+    return {
+        alternates: {
+            canonical: `https://www.manalalhihi.com/${safeLocale}/courses`,
+            languages: {
+                ar: 'https://www.manalalhihi.com/ar/courses',
+                en: 'https://www.manalalhihi.com/en/courses',
+            },
+        },
+    };
+}
 
 async function getData(universityId?: string) {
     try {

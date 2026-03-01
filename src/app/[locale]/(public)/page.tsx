@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Link } from '@/i18n/routing';
 import { Navbar } from '@/components/common/navbar';
 import { Footer } from '@/components/common/footer';
@@ -47,6 +48,26 @@ import { BackgroundWrapper } from '@/components/marketing/background-wrapper';
 import { HeroSection } from '@/components/marketing/hero-section';
 
 // ... (getFeaturedCourses function remains same)
+
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+    const { locale } = await params;
+    const safeLocale = locale === 'ar' ? 'ar' : 'en';
+
+    return {
+        alternates: {
+            canonical: `https://www.manalalhihi.com/${safeLocale}`,
+            languages: {
+                ar: 'https://www.manalalhihi.com/ar',
+                en: 'https://www.manalalhihi.com/en',
+                'x-default': 'https://www.manalalhihi.com',
+            },
+        },
+    };
+}
 
 export default async function HomePage() {
     const courses = await getFeaturedCourses();
