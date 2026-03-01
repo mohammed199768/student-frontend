@@ -22,14 +22,36 @@ export async function generateMetadata({
 }): Promise<Metadata> {
     const { locale } = await params;
     const safeLocale = locale === 'ar' ? 'ar' : 'en';
+    const isArabic = safeLocale === 'ar';
+    const title = isArabic
+        ? 'دورات منال الحيحي | KSU وجامعة الأمير سلطان'
+        : 'Manal Courses | KSU and Prince Sultan University';
+    const description = isArabic
+        ? 'تصفح دورات منال الحيحي الجامعية، بما يشمل محتوى لطلاب KSU وجامعة الأمير سلطان.'
+        : 'Browse Manal Alhihi university courses including content for KSU and Prince Sultan University students.';
+    const keywords = isArabic
+        ? ['دورات منال', 'منال الحيحي', 'دورات ksu', 'ksu', 'جامعة الأمير سلطان', 'دورات جامعية']
+        : ['manal courses', 'manal alhihi', 'ksu courses', 'ksu', 'prince sultan', 'university courses'];
 
     return {
+        title,
+        description,
+        keywords,
         alternates: {
             canonical: `https://www.manalalhihi.com/${safeLocale}/courses`,
             languages: {
                 ar: 'https://www.manalalhihi.com/ar/courses',
                 en: 'https://www.manalalhihi.com/en/courses',
             },
+        },
+        openGraph: {
+            title,
+            description,
+            url: `https://www.manalalhihi.com/${safeLocale}/courses`,
+        },
+        twitter: {
+            title,
+            description,
         },
     };
 }

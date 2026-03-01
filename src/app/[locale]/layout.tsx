@@ -12,18 +12,36 @@ import { Preloader } from '@/components/common/preloader';
 import { RouteLoader } from '@/components/common/route-loader';
 import '@/app/globals.css';
 
+const BRAND_KEYWORDS = [
+    'منال',
+    'منال الحيحي',
+    'منال الحيحي دورات',
+    'دورات منال',
+    'manal',
+    'manal alhihi',
+    't.manal',
+    't manal',
+    'manal lms',
+    't.manal lms',
+    'ksu',
+    'ksu courses',
+    'prince sultan',
+    'prince sultan university',
+    'جامعة الأمير سلطان',
+];
+
 const metadataBaseConfig: Metadata = {
     metadataBase: new URL('https://www.manalalhihi.com'),
     title: {
         default: 'T.MANAL ALHIHI',
         template: '%s | T.MANAL ALHIHI',
     },
-    description: 'Educational Platform',
+    description: 'T.MANAL ALHIHI platform for online learning, university courses, and KSU-focused educational content.',
     applicationName: 'T.MANAL LMS',
     authors: [{ name: 'INKSPIRE' }],
     creator: 'INKSPIRE',
     publisher: 'INKSPIRE',
-    keywords: ['T.MANAL LMS', 'T.MANAL ALHIHI', 'INKSPIRE', 'T.MANL ALHIHI', 'Educational Platform', 'Online Learning', 'LMS'],
+    keywords: BRAND_KEYWORDS,
     manifest: '/manifest.webmanifest',
     robots: {
         index: true,
@@ -38,7 +56,7 @@ const metadataBaseConfig: Metadata = {
     },
     openGraph: {
         title: 'T.MANAL ALHIHI',
-        description: 'Educational Platform',
+        description: 'T.MANAL ALHIHI platform for online learning, university courses, and KSU-focused educational content.',
         url: 'https://www.manalalhihi.com',
         siteName: 'T.MANAL LMS',
         type: 'website',
@@ -54,7 +72,7 @@ const metadataBaseConfig: Metadata = {
     twitter: {
         card: 'summary_large_image',
         title: 'T.MANAL ALHIHI',
-        description: 'Educational Platform',
+        description: 'T.MANAL ALHIHI platform for online learning, university courses, and KSU-focused educational content.',
         creator: 'INKSPIRE',
         images: ['/favicon.webp'],
     },
