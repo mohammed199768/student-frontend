@@ -45,9 +45,9 @@ const metadataBaseConfig: Metadata = {
     },
     description: 'T.MANAL ALHIHI platform for online learning, university courses, and KSU-focused educational content.',
     applicationName: 'T.MANAL LMS',
-    authors: [{ name: 'INKSPIRE' }],
-    creator: 'INKSPIRE',
-    publisher: 'INKSPIRE',
+    authors: [{ name: 'Mohammed Aldomi' }],
+    creator: 'Mohammed Aldomi',
+    publisher: 'T.MANAL LMS',
     keywords: BRAND_KEYWORDS,
     manifest: '/manifest.webmanifest',
     robots: {
