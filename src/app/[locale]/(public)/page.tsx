@@ -64,8 +64,8 @@ export async function generateMetadata({
         ? 'منصة منال الحيحي للدورات الجامعية والتعليم الإلكتروني، تشمل محتوى مخصص لطلاب KSU وجامعة الأمير سلطان.'
         : 'Manal Alhihi online learning platform with university-focused courses, including KSU and Prince Sultan University related content.';
     const keywords = isArabic
-        ? ['منال', 'منال الحيحي', 'دورات منال', 'دورات ksu', 'جامعة الأمير سلطان', 'منصة تعليمية']
-        : ['manal', 'manal alhihi', 't.manal', 'ksu courses', 'ksu', 'prince sultan'];
+        ? ['منال', 'منال الحيحي', 'دورات منال', 'دورات ksu', 'جامعة الأمير سلطان', 'منصة تعليمية', 'منصة منال التعليمية', 'منصة منال', 'منصة']
+        : ['manal', 'manal alhihi', 't.manal', 'manal lms', 'ksu courses', 'ksu', 'prince sultan'];
 
     return {
         title,

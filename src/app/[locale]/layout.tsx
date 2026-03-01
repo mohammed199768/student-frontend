@@ -23,11 +23,18 @@ const BRAND_KEYWORDS = [
     't manal',
     'manal lms',
     't.manal lms',
+    'manal educational platform',
+    'manal platform',
+    't manal lms',
     'ksu',
     'ksu courses',
     'prince sultan',
     'prince sultan university',
     'جامعة الأمير سلطان',
+    'منصة منال التعليمية',
+    'منصة منال',
+    'منصة تعليمية',
+    'منصة',
 ];
 
 const metadataBaseConfig: Metadata = {
