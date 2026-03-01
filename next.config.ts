@@ -4,6 +4,20 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/ar/about',
+        destination: '/ar/courses',
+        permanent: true,
+      },
+      {
+        source: '/en/about',
+        destination: '/en/courses',
+        permanent: true,
+      },
+    ];
+  },
   turbopack: {
     root: process.cwd(),
   },
