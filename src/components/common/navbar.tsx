@@ -16,6 +16,7 @@ import {
     X,
     Sun,
     Moon,
+    Play,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -101,6 +102,7 @@ export function Navbar() {
     const desktopNavLinks = [
         { href: '/', label: t('home') },
         { href: '/courses', label: t('courses') },
+        { href: '/trailer', label: locale === 'ar' ? 'عروض مجانية' : 'Free Previews' },
         { href: '/contact', label: t('contact') },
     ];
 
@@ -353,7 +355,7 @@ export function Navbar() {
 
             {/* Mobile Bottom Navigation Only */}
             <nav className="fixed inset-x-3 bottom-3 z-50 isolate rounded-4xl border border-slate-200 dark:border-white/10 bg-white/98 dark:bg-slate-900/95 px-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] pt-2 shadow-2xl shadow-black/40 md:hidden">
-                <div className="grid grid-cols-5 gap-1">
+                <div className="grid grid-cols-6 gap-1">
                     <Link
                         href="/courses"
                         className={cn(
@@ -365,6 +367,19 @@ export function Navbar() {
                     >
                         <BookOpen className="h-4 w-4" />
                         <span className="line-clamp-1">{t('courses')}</span>
+                    </Link>
+
+                    <Link
+                        href="/trailer"
+                        className={cn(
+                            'flex flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-medium transition-colors',
+                            pathname === '/trailer' || pathname.startsWith('/trailer/')
+                                ? 'bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300'
+                                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'
+                        )}
+                    >
+                        <Play className="h-4 w-4" />
+                        <span className="line-clamp-1">{locale === 'ar' ? 'عروض' : 'Previews'}</span>
                     </Link>
 
                     <Link
