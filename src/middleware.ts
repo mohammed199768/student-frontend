@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 const PUBLIC_FILE = /\.(.*)$/;
 // POLICY: Public by default. Only these routes require strict auth.
 // (student) group routes:
-const PROTECTED_SEGMENTS = ['/dashboard', '/profile', '/learn', '/enroll', '/verify-email'];
+const PROTECTED_SEGMENTS = ['/dashboard', '/profile', '/learn', '/enroll', '/verify-email', '/trailer'];
 
 export default async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
