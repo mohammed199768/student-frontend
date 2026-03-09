@@ -132,7 +132,7 @@ export default function RegisterPage() {
                             <input
                                 {...register('phoneNumber')}
                                 type="tel"
-                                placeholder="+123..."
+                                placeholder="+966..."
                                 className="w-full rounded-2xl border-2 border-transparent bg-slate-50 dark:bg-slate-950 py-3 px-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-900 focus:border-indigo-500/50 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all shadow-inner dark:shadow-black/20 dir-ltr text-right"
                             />
                         </div>
