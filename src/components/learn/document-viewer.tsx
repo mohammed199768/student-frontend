@@ -85,6 +85,10 @@ export function DocumentViewer({ lessonId, assetId, pageCount: initialPageCount,
                 objectUrlRef.current = nextUrl;
 
                 setDocumentUrl(nextUrl);
+
+                if (blob.type && blob.type.startsWith('image/')) {
+                    setIsLoading(false); // Instantly stop loading indicator for images
+                }
             } catch (err) {
                 console.error('Secure PDF Fetch Error:', err);
                 if (isMounted) {
