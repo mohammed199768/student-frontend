@@ -47,6 +47,8 @@ export function DocumentViewer({ lessonId, assetId, pageCount: initialPageCount,
         setIsLoading(false);
     }
 
+    const [isImage, setIsImage] = useState(false);
+
     useEffect(() => {
         let isMounted = true;
 
@@ -60,6 +62,7 @@ export function DocumentViewer({ lessonId, assetId, pageCount: initialPageCount,
             setIsLoading(true);
             setError(null);
             setNumPages(initialPageCount || null);
+            setIsImage(false);
 
             try {
                 const blob = await apiClient.getBlob(
@@ -68,7 +71,9 @@ export function DocumentViewer({ lessonId, assetId, pageCount: initialPageCount,
 
                 if (!isMounted) return;
 
-                if (blob.type && blob.type !== 'application/pdf' && blob.type !== 'application/octet-stream') {
+                if (blob.type && blob.type.startsWith('image/')) {
+                    setIsImage(true);
+                } else if (blob.type && blob.type !== 'application/pdf' && blob.type !== 'application/octet-stream') {
                     throw new Error(`Unexpected content type: ${blob.type}`);
                 }
 
@@ -261,6 +266,21 @@ export function DocumentViewer({ lessonId, assetId, pageCount: initialPageCount,
                      <div className="flex flex-col items-center justify-center text-red-400 gap-2 h-full">
                          <AlertTriangle className="h-8 w-8" />
                          <p>{error}</p>
+                     </div>
+                 ) : isImage ? (
+                     <div className="flex items-center justify-center w-full h-full min-h-[400px]">
+                        <img 
+                            src={documentUrl!} 
+                            alt={title || 'Document Image'} 
+                            style={{ 
+                                maxWidth: '100%', 
+                                maxHeight: isFullscreen ? '100vh' : 'calc(100vh - 200px)',
+                                objectFit: 'contain',
+                                transform: `scale(${scale})`,
+                                transition: 'transform 0.2s ease-out'
+                            }} 
+                            className="rounded-lg shadow-2xl" 
+                        />
                      </div>
                  ) : (
                      <div className="inline-block shadow-2xl">
