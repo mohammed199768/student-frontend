@@ -189,7 +189,7 @@ export default function TrailerWatchPage() {
                                                 {isArabic ? 'سجّل دخولك لمشاهدة محتوى العرض التعريفي' : 'Sign in to watch the preview content'}
                                             </p>
                                             <Link
-                                                href="/login"
+                                                href={`/login?redirect=/trailer/${courseId}/watch?assetId=${currentAsset?.id}` as any}
                                                 className="inline-block rounded-2xl bg-indigo-600 px-8 py-4 font-bold text-white hover:bg-indigo-700"
                                             >
                                                 {isArabic ? 'تسجيل الدخول' : 'Sign In'}

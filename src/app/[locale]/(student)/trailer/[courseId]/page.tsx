@@ -115,7 +115,7 @@ export default function TrailerCoursePage() {
     // ─────────── Loading ───────────
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-[var(--bg-base)]">
+            <div className="min-h-screen bg-(--bg-base)">
                 <Navbar />
                 <div className="flex justify-center py-32">
                     <div className="page-loader__ring" />
@@ -127,16 +127,16 @@ export default function TrailerCoursePage() {
     // ─────────── Error ───────────
     if (error || !trailer) {
         return (
-            <div className="min-h-screen bg-[var(--bg-base)]">
+            <div className="min-h-screen bg-(--bg-base)">
                 <Navbar />
                 <div className="mx-auto max-w-lg px-4 py-32 text-center">
-                    <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[var(--bg-muted)]">
-                        <BookOpen className="h-10 w-10 text-[var(--text-subtle)]" />
+                    <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-(--bg-muted)">
+                        <BookOpen className="h-10 w-10 text-(--text-subtle)" />
                     </div>
-                    <p className="text-lg font-semibold text-[var(--text-muted)]">{error || 'Trailer not found'}</p>
+                    <p className="text-lg font-semibold text-(--text-muted)">{error || 'Trailer not found'}</p>
                     <Link
                         href={`/courses/${courseId}` as any}
-                        className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[var(--brand)] px-6 py-3 font-semibold text-white transition-all hover:bg-[var(--brand-hover)] hover:shadow-lg"
+                        className="mt-6 inline-flex items-center gap-2 rounded-xl bg-(--brand) px-6 py-3 font-semibold text-white transition-all hover:bg-(--brand-hover) hover:shadow-lg"
                     >
                         {isArabic ? 'العودة للدورة' : 'Back to Course'}
                     </Link>
@@ -146,13 +146,13 @@ export default function TrailerCoursePage() {
     }
 
     return (
-        <div className="min-h-screen bg-[var(--bg-base)]">
+        <div className="min-h-screen bg-(--bg-base)">
             <Navbar />
 
             {/* ═══════════════════════════════════════════
                 HERO SECTION — gradient banner
                ═══════════════════════════════════════════ */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-violet-800 dark:from-indigo-900 dark:via-slate-900 dark:to-violet-950">
+            <div className="relative overflow-hidden bg-linear-to-br from-indigo-600 via-indigo-700 to-violet-800 dark:from-indigo-900 dark:via-slate-900 dark:to-violet-950">
                 {/* Decorative orbs */}
                 <div className="pointer-events-none absolute -top-32 -right-32 h-96 w-96 rounded-full bg-white/5 blur-3xl" />
                 <div className="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-violet-400/10 blur-3xl" />
@@ -251,7 +251,7 @@ export default function TrailerCoursePage() {
                             </p>
                         </div>
                         <Link
-                            href="/login"
+                            href={`/login?redirect=/trailer/${courseId}` as any}
                             className="shrink-0 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-bold text-white transition-all hover:bg-indigo-700 hover:shadow-lg"
                         >
                             {isArabic ? 'دخول' : 'Sign In'}
@@ -266,10 +266,10 @@ export default function TrailerCoursePage() {
                             <Eye className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                         </div>
                         <div>
-                            <h2 className="text-xl font-black text-[var(--text-base)]">
+                            <h2 className="text-xl font-black text-(--text-base)">
                                 {isArabic ? 'المحتوى المتاح للمعاينة' : 'Preview Content'}
                             </h2>
-                            <p className="text-sm text-[var(--text-muted)]">
+                            <p className="text-sm text-(--text-muted)">
                                 {isArabic
                                     ? 'استكشف محتوى الدورة قبل الاشتراك'
                                     : 'Explore course content before enrolling'}
@@ -281,21 +281,21 @@ export default function TrailerCoursePage() {
                         {trailer.trailerLectures.map((lecture, idx) => (
                             <div
                                 key={lecture.id}
-                                className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] shadow-sm transition-all hover:shadow-md"
+                                className="overflow-hidden rounded-2xl border border-(--border) bg-(--bg-card) shadow-sm transition-all hover:shadow-md"
                             >
                                 <button
                                     onClick={() =>
                                         setExpandedLectureId((c) => (c === lecture.id ? null : lecture.id))
                                     }
-                                    className="flex w-full items-center gap-4 p-5 text-left transition-colors hover:bg-[var(--bg-muted)]"
+                                    className="flex w-full items-center gap-4 p-5 text-left transition-colors hover:bg-(--bg-muted)"
                                 >
                                     {/* Lecture number badge */}
-                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-sm font-black text-white shadow-md">
+                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-indigo-500 to-violet-600 text-sm font-black text-white shadow-md">
                                         {idx + 1}
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="font-bold text-[var(--text-base)] truncate">{lecture.title}</p>
-                                        <p className="text-xs text-[var(--text-muted)]">
+                                        <p className="font-bold text-(--text-base) truncate">{lecture.title}</p>
+                                        <p className="text-xs text-(--text-muted)">
                                             {lecture.parts.reduce((a, p) => a + p.lessons.length, 0)} {isArabic ? 'فيديو' : 'videos'}
                                             {lecture.parts.reduce((a, p) => a + p.files.length, 0) > 0 && (
                                                 <> · {lecture.parts.reduce((a, p) => a + p.files.length, 0)} {isArabic ? 'ملف' : 'files'}</>
@@ -303,22 +303,22 @@ export default function TrailerCoursePage() {
                                         </p>
                                     </div>
                                     <div className={`transition-transform duration-200 ${expandedLectureId === lecture.id ? 'rotate-180' : ''}`}>
-                                        <ChevronDown className="h-5 w-5 text-[var(--text-subtle)]" />
+                                        <ChevronDown className="h-5 w-5 text-(--text-subtle)" />
                                     </div>
                                 </button>
 
                                 {/* Expanded content */}
                                 {expandedLectureId === lecture.id && (
-                                    <div className="border-t border-[var(--border)] bg-[var(--bg-muted)] p-4 space-y-4 animate-fade-in">
+                                    <div className="border-t border-(--border) bg-(--bg-muted) p-4 space-y-4 animate-fade-in">
                                         {lecture.parts.map((part) => (
                                             <div key={part.id} className="space-y-2">
-                                                <p className="ml-1 text-xs font-bold uppercase tracking-wider text-[var(--text-subtle)]">{part.title}</p>
+                                                <p className="ml-1 text-xs font-bold uppercase tracking-wider text-(--text-subtle)">{part.title}</p>
 
                                                 {/* Video lessons */}
                                                 {part.lessons.map((lesson) => (
                                                     <div
                                                         key={lesson.id}
-                                                        className="group flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-3.5 transition-all hover:border-indigo-300 hover:shadow-sm dark:hover:border-indigo-500/30"
+                                                        className="group flex items-center gap-3 rounded-xl border border-(--border) bg-(--bg-card) p-3.5 transition-all hover:border-indigo-300 hover:shadow-sm dark:hover:border-indigo-500/30"
                                                     >
                                                         <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${canWatchVideo
                                                             ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-400'
@@ -329,7 +329,7 @@ export default function TrailerCoursePage() {
                                                                 : <Lock className="h-3.5 w-3.5" />
                                                             }
                                                         </div>
-                                                        <span className="flex-1 text-sm font-medium text-[var(--text-base)] truncate">{lesson.title}</span>
+                                                        <span className="flex-1 text-sm font-medium text-(--text-base) truncate">{lesson.title}</span>
                                                         {canWatchVideo && (
                                                             <Link
                                                                 href={`/trailer/${courseId}/watch` as any}
@@ -345,13 +345,13 @@ export default function TrailerCoursePage() {
                                                 {part.files.map((file) => (
                                                     <div
                                                         key={file.id}
-                                                        className="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-3.5"
+                                                        className="flex items-center gap-3 rounded-xl border border-(--border) bg-(--bg-card) p-3.5"
                                                     >
                                                         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400">
                                                             <FileText className="h-3.5 w-3.5" />
                                                         </div>
-                                                        <span className="flex-1 text-sm font-medium text-[var(--text-base)] truncate">{file.title}</span>
-                                                        <span className="rounded-md bg-[var(--bg-muted)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[var(--text-subtle)]">
+                                                        <span className="flex-1 text-sm font-medium text-(--text-base) truncate">{file.title}</span>
+                                                        <span className="rounded-md bg-(--bg-muted) px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-(--text-subtle)">
                                                             {file.type}
                                                         </span>
                                                     </div>
@@ -372,10 +372,10 @@ export default function TrailerCoursePage() {
                             <BookOpen className="h-5 w-5 text-slate-600 dark:text-slate-400" />
                         </div>
                         <div>
-                            <h2 className="text-xl font-black text-[var(--text-base)]">
+                            <h2 className="text-xl font-black text-(--text-base)">
                                 {isArabic ? 'محتوى الدورة الكامل' : 'Full Course Content'}
                             </h2>
-                            <p className="text-sm text-[var(--text-muted)]">
+                            <p className="text-sm text-(--text-muted)">
                                 {isArabic
                                     ? `${trailer.courseOutline.length} محاضرات — اشترك لفتح المحتوى بالكامل`
                                     : `${trailer.courseOutline.length} lectures — enroll to unlock everything`}
@@ -387,19 +387,19 @@ export default function TrailerCoursePage() {
                         {trailer.courseOutline.map((lecture, idx) => (
                             <div
                                 key={lecture.id}
-                                className="flex items-center gap-4 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-4 transition-colors"
+                                className="flex items-center gap-4 rounded-xl border border-(--border) bg-(--bg-card) p-4 transition-colors"
                             >
                                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-xs font-bold text-slate-500 dark:bg-slate-800 dark:text-slate-400">
                                     {idx + 1}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-semibold text-[var(--text-base)] truncate">{lecture.title}</p>
+                                    <p className="text-sm font-semibold text-(--text-base) truncate">{lecture.title}</p>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <span className="rounded-md bg-[var(--bg-muted)] px-2 py-0.5 text-[10px] font-bold text-[var(--text-subtle)]">
+                                    <span className="rounded-md bg-(--bg-muted) px-2 py-0.5 text-[10px] font-bold text-(--text-subtle)">
                                         {lecture._count.parts} {isArabic ? 'أقسام' : 'parts'}
                                     </span>
-                                    <Lock className="h-3.5 w-3.5 text-[var(--text-subtle)]" />
+                                    <Lock className="h-3.5 w-3.5 text-(--text-subtle)" />
                                 </div>
                             </div>
                         ))}
@@ -407,7 +407,7 @@ export default function TrailerCoursePage() {
                 </section>
 
                 {/* ── Bottom CTA Banner ── */}
-                <section className="overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-700 p-8 text-center shadow-xl sm:p-10 dark:from-indigo-800 dark:to-violet-900">
+                <section className="overflow-hidden rounded-2xl bg-linear-to-r from-indigo-600 to-violet-700 p-8 text-center shadow-xl sm:p-10 dark:from-indigo-800 dark:to-violet-900">
                     <Sparkles className="mx-auto mb-4 h-8 w-8 text-white/70" />
                     <h3 className="text-2xl font-black text-white sm:text-3xl">
                         {isArabic ? 'جاهز للبدء في التعلم؟' : 'Ready to start learning?'}
@@ -432,12 +432,12 @@ export default function TrailerCoursePage() {
             {/* ═══════════════════════════════════════════
                 MOBILE STICKY CTA BAR
                ═══════════════════════════════════════════ */}
-            <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--border)] bg-[var(--bg-overlay)] p-3 backdrop-blur-xl sm:hidden">
+            <div className="fixed inset-x-0 bottom-0 z-40 border-t border-(--border) bg-(--bg-overlay) p-3 backdrop-blur-xl sm:hidden">
                 <div className="flex items-center justify-between gap-3">
                     <div>
-                        <p className="text-xs font-semibold text-[var(--text-muted)]">{isArabic ? 'السعر' : 'Price'}</p>
-                        <p className="text-lg font-black text-[var(--text-base)]">
-                            {trailer.course.price} <span className="text-xs font-semibold text-[var(--text-subtle)]">SAR</span>
+                        <p className="text-xs font-semibold text-(--text-muted)">{isArabic ? 'السعر' : 'Price'}</p>
+                        <p className="text-lg font-black text-(--text-base)">
+                            {trailer.course.price} <span className="text-xs font-semibold text-(--text-subtle)">SAR</span>
                         </p>
                     </div>
                     <Link

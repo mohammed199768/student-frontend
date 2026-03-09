@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useTranslations } from 'next-intl';
+import { useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { Loader2, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -24,6 +25,8 @@ export default function RegisterPage() {
     const t = useTranslations('auth');
     const ct = useTranslations('common');
     const { login } = useAuth();
+    const searchParams = useSearchParams();
+    const redirectPath = searchParams.get('redirect') || '/verify-email';
     const [isSubmitting, setIsSubmitting] = useState(false);
     const submitLockRef = useRef(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -56,7 +59,7 @@ export default function RegisterPage() {
                 throw new Error('Registration succeeded without access token');
             }
 
-            await login(accessToken, '/verify-email');
+            await login(accessToken, redirectPath);
             toast.success(t('register_success'));
         } catch (error: unknown) {
             const err = error as ApiError;
@@ -184,7 +187,10 @@ export default function RegisterPage() {
 
                     <div className="relative mt-8 text-center text-sm font-medium text-slate-500 dark:text-slate-400">
                         {t('have_account')}{' '}
-                        <Link href="/login" className="font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors underline decoration-2 underline-offset-4 decoration-indigo-500/30 hover:decoration-indigo-500">
+                        <Link
+                            href={searchParams.get('redirect') ? `/login?redirect=${searchParams.get('redirect')}` as any : "/login"}
+                            className="font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors underline decoration-2 underline-offset-4 decoration-indigo-500/30 hover:decoration-indigo-500"
+                        >
                             {ct('login')}
                         </Link>
                     </div>

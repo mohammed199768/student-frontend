@@ -150,7 +150,10 @@ export default function LoginPage() {
 
                     <div className="relative mt-8 text-center text-sm font-medium text-slate-500 dark:text-slate-400">
                         {t('no_account')}{' '}
-                        <Link href="/register" className="font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors underline decoration-2 underline-offset-4 decoration-indigo-500/30 hover:decoration-indigo-500">
+                        <Link
+                            href={searchParams.get('redirect') ? `/register?redirect=${searchParams.get('redirect')}` as any : "/register"}
+                            className="font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors underline decoration-2 underline-offset-4 decoration-indigo-500/30 hover:decoration-indigo-500"
+                        >
                             {t('create_account')}
                         </Link>
                     </div>
