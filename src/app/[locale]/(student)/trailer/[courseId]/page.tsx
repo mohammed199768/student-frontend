@@ -102,33 +102,13 @@ export default function TrailerCoursePage() {
     }, [courseId, isArabic]);
 
     useEffect(() => {
-        let isMounted = true;
-
-        if (status !== 'authenticated') {
+        // Allow watching if authenticated — backend verifies email on actual video requests
+        if (status === 'authenticated') {
+            setCanWatchVideo(true);
+        } else {
             setCanWatchVideo(false);
-            return () => {
-                isMounted = false;
-            };
         }
-
-        const verifyWatchAccess = async () => {
-            try {
-                await apiClient.get(`/courses/${courseId}/trailer`);
-                if (isMounted) {
-                    setCanWatchVideo(true);
-                }
-            } catch {
-                if (isMounted) {
-                    setCanWatchVideo(false);
-                }
-            }
-        };
-
-        verifyWatchAccess();
-        return () => {
-            isMounted = false;
-        };
-    }, [status, courseId]);
+    }, [status]);
 
     if (isLoading) {
         return (
