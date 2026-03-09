@@ -45,7 +45,7 @@ export function Footer() {
                 </div>
                 <div className="mt-12 border-t border-slate-200 dark:border-white/5 pt-8 text-center">
                     <p className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-300">
-                        &copy; 2026 T.MANAL ALHIHI. All rights reserved.
+                        &copy; 2026 T.MANAL ALHIHI. All rights reserved
                     </p>
                     <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-500">
                         Platform developed and engineered by{' '}
