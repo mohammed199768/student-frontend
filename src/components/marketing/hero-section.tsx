@@ -57,13 +57,6 @@ export function HeroSection() {
                             <Sparkles className="w-5 h-5" />
                             {t('hero_cta_primary')}
                         </Link>
-                        <Link
-                            href="/courses"
-                            className="w-full sm:w-auto px-8 py-5 rounded-2xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold text-lg border-2 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:bg-slate-700 transition-all hover:scale-105 active:scale-95 flex items-center justify-center"
-                        >
-                            <Play className="w-5 h-5 ml-2 fill-current" />
-                            {t('hero_cta_secondary')}
-                        </Link>
                     </motion.div>
 
                     {/* Hero Visual - Dashboard Preview */}
@@ -110,15 +103,13 @@ export function HeroSection() {
                             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                             className="absolute -top-12 -left-8 md:top-24 md:-left-16 p-3 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl hidden lg:block"
                         >
-                            <Link href="/">
-                                <Image
-                                    src="/prince-sultan-university-seeklogo.png"
-                                    alt="Prince Sultan University"
-                                    width={64}
-                                    height={64}
-                                    className="w-16 h-16 object-contain"
-                                />
-                            </Link>
+                            <Image
+                                src="/prince-sultan-university-seeklogo.png"
+                                alt="Prince Sultan University"
+                                width={64}
+                                height={64}
+                                className="w-16 h-16 object-contain cursor-default"
+                            />
                         </motion.div>
 
                         <motion.div
@@ -126,15 +117,13 @@ export function HeroSection() {
                             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                             className="absolute -top-8 -right-8 md:top-20 md:-right-12 p-3 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl hidden lg:block"
                         >
-                            <Link href="/">
-                                <Image
-                                    src="/king-saud-university-seeklogo.png"
-                                    alt="King Saud University"
-                                    width={64}
-                                    height={64}
-                                    className="w-16 h-16 object-contain"
-                                />
-                            </Link>
+                            <Image
+                                src="/king-saud-university-seeklogo.png"
+                                alt="King Saud University"
+                                width={64}
+                                height={64}
+                                className="w-16 h-16 object-contain cursor-default"
+                            />
                         </motion.div>
 
                         {/* Bottom Glow */}
