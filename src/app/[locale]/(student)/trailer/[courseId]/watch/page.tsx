@@ -64,9 +64,8 @@ export default function TrailerWatchPage() {
     const isArabic = locale === 'ar';
     const searchParams = useSearchParams();
     const assetId = searchParams.get('assetId');
-    const { status, user } = useAuth();
-    const isVerified = !!(user?.emailVerifiedAt || (user as any)?.isEmailVerified);
-    const canWatch = status === 'authenticated' && isVerified;
+    const { status } = useAuth();
+    const canWatch = status === 'authenticated';
 
     const [trailer, setTrailer] = useState<TrailerData | null>(null);
     const [loading, setLoading] = useState(true);
@@ -179,7 +178,7 @@ export default function TrailerWatchPage() {
                             <div className="h-full flex flex-col">
                                 <div className="flex-1 flex items-center justify-center p-4">
 
-                                    {/* Not verified / not logged in → lock overlay */}
+                                    {/* Not logged in → lock overlay */}
                                     {!canWatch ? (
                                         <div className="text-center p-12 bg-slate-900 rounded-3xl border border-slate-800 max-w-md w-full">
                                             <Lock className="h-16 w-16 text-slate-700 mx-auto mb-6" />
@@ -187,25 +186,14 @@ export default function TrailerWatchPage() {
                                                 {isArabic ? 'تسجيل الدخول مطلوب' : 'Sign in Required'}
                                             </h2>
                                             <p className="text-slate-400 mb-8">
-                                                {status !== 'authenticated'
-                                                    ? (isArabic ? 'سجّل دخولك لمشاهدة محتوى العرض التعريفي' : 'Sign in to watch the preview content')
-                                                    : (isArabic ? 'فعّل بريدك الإلكتروني أولاً لمشاهدة المحتوى' : 'Verify your email to watch content')}
+                                                {isArabic ? 'سجّل دخولك لمشاهدة محتوى العرض التعريفي' : 'Sign in to watch the preview content'}
                                             </p>
-                                            {status !== 'authenticated' ? (
-                                                <Link
-                                                    href="/login"
-                                                    className="inline-block rounded-2xl bg-indigo-600 px-8 py-4 font-bold text-white hover:bg-indigo-700"
-                                                >
-                                                    {isArabic ? 'تسجيل الدخول' : 'Sign In'}
-                                                </Link>
-                                            ) : (
-                                                <Link
-                                                    href="/verify-email"
-                                                    className="inline-block rounded-2xl bg-amber-600 px-8 py-4 font-bold text-white hover:bg-amber-700"
-                                                >
-                                                    {isArabic ? 'تفعيل البريد' : 'Verify Email'}
-                                                </Link>
-                                            )}
+                                            <Link
+                                                href="/login"
+                                                className="inline-block rounded-2xl bg-indigo-600 px-8 py-4 font-bold text-white hover:bg-indigo-700"
+                                            >
+                                                {isArabic ? 'تسجيل الدخول' : 'Sign In'}
+                                            </Link>
                                         </div>
                                     ) : (
                                         /* ── Actual player ── */
