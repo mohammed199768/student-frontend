@@ -173,7 +173,7 @@ export default function TrailerWatchPage() {
                 <div className="flex flex-1 overflow-hidden">
 
                     {/* ── Main Player ── */}
-                    <div className="flex-1 overflow-y-auto bg-black relative">
+                    <div className="flex-1 min-w-0 overflow-y-auto bg-black relative">
                         {currentAsset ? (
                             <div className="h-full flex flex-col">
                                 <div className="flex-1 flex items-center justify-center p-4">
@@ -255,7 +255,7 @@ export default function TrailerWatchPage() {
 
                     {/* ── Sidebar — TRAILER ONLY ── */}
                     <div className={cn(
-                        "w-80 border-l border-slate-800 bg-slate-900 overflow-y-auto transition-all fixed lg:relative inset-y-0 right-0 z-50 lg:z-0 lg:translate-x-0 rtl:right-auto rtl:left-0 rtl:border-l-0 rtl:border-r",
+                        "w-80 shrink-0 border-l border-slate-800 bg-slate-900 overflow-y-auto transition-all fixed lg:relative inset-y-0 right-0 z-50 lg:z-0 lg:translate-x-0 rtl:right-auto rtl:left-0 rtl:border-l-0 rtl:border-r",
                         sidebarOpen ? "translate-x-0" : "translate-x-full rtl:-translate-x-full"
                     )}>
                         {/* Sidebar header */}
