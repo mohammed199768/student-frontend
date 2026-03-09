@@ -216,7 +216,7 @@ export function DocumentViewer({ lessonId, assetId, pageCount: initialPageCount,
     return (
         <div id="doc-viewer-container" 
              ref={containerRef}
-             className={`relative bg-slate-900 flex flex-col items-center justify-start select-none ${className} ${(isFullscreen || cssFullscreenFallback) ? 'fixed inset-0 z-50 w-full h-full' : 'min-h-[500px]'}`}
+             className={`relative bg-slate-900 flex flex-col items-center justify-start select-none min-w-0 ${className} ${(isFullscreen || cssFullscreenFallback) ? 'fixed inset-0 z-50 w-full h-full' : 'min-h-[500px]'}`}
              dir="ltr"> {/* Enforce LTR for Viewer internal layout to prevent RTL scroll bugs */}
              
              {/* Security Styles - Prevent printing */}
