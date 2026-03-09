@@ -109,11 +109,11 @@ export default function LearnPage() {
                     </div>
                 </div>
 
-                <div className="flex flex-1 overflow-hidden">
+                <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_320px] overflow-hidden">
                     {/* Main Player Area */}
-                    <div className="flex-1 min-w-0 overflow-y-auto bg-black relative">
+                    <div className="flex flex-col overflow-y-auto bg-black relative min-w-0">
                         {currentAsset ? (
-                            <div className="h-full flex flex-col">
+                            <div className="min-h-full flex flex-col">
                                 <div className="flex-1 flex items-center justify-center p-4">
                                     {currentAsset.isLocked ? (
                                         <div className="text-center p-12 bg-slate-900 rounded-3xl border border-slate-800 max-w-md">
@@ -143,7 +143,7 @@ export default function LearnPage() {
                                             )}
                                         </div>
                                     ) : (
-                                        <div className="w-full max-w-5xl aspect-video rounded-3xl overflow-hidden shadow-2xl bg-slate-900">
+                                        <div className={cn("w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl bg-slate-900 h-full max-h-[80vh]", currentAsset.type === 'VIDEO' && "aspect-video")}>
                                             {currentAsset.type === 'VIDEO' && (
                                                 <VideoPlayer
                                                     assetId={currentAsset.id}
@@ -166,7 +166,7 @@ export default function LearnPage() {
                                     )}
                                 </div>
 
-                                <div className="bg-slate-900 border-t border-slate-800 p-8 min-h-[400px]">
+                                <div className="bg-slate-900 border-t border-slate-800 p-8 min-h-[400px] shrink-0 mt-auto">
                                     <div className="max-w-4xl mx-auto">
                                         <div>
                                             <h2 className="text-2xl font-bold mb-4">{currentAsset.title}</h2>
@@ -178,7 +178,7 @@ export default function LearnPage() {
                                 </div>
                             </div>
                         ) : (
-                            <div className="flex h-full items-center justify-center">
+                            <div className="flex h-full flex-1 items-center justify-center min-h-[500px]">
                                 <PlayCircle className="h-20 w-20 text-slate-800 animate-pulse" />
                             </div>
                         )}

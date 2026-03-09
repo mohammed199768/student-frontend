@@ -170,12 +170,12 @@ export default function TrailerWatchPage() {
                 </div>
 
                 {/* ── Body ── */}
-                <div className="flex flex-1 overflow-hidden">
+                <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_320px] overflow-hidden">
 
                     {/* ── Main Player ── */}
-                    <div className="flex-1 min-w-0 overflow-y-auto bg-black relative">
+                    <div className="flex flex-col overflow-y-auto bg-black relative min-w-0">
                         {currentAsset ? (
-                            <div className="h-full flex flex-col">
+                            <div className="min-h-full flex flex-col">
                                 <div className="flex-1 flex items-center justify-center p-4">
 
                                     {/* Not logged in → lock overlay */}
@@ -197,7 +197,7 @@ export default function TrailerWatchPage() {
                                         </div>
                                     ) : (
                                         /* ── Actual player ── */
-                                        <div className="w-full max-w-5xl aspect-video rounded-3xl overflow-hidden shadow-2xl bg-slate-900">
+                                        <div className={cn("w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl bg-slate-900 h-full max-h-[80vh]", currentAsset.type === 'VIDEO' && "aspect-video")}>
                                             {currentAsset.type === 'VIDEO' && (
                                                 <VideoPlayer
                                                     assetId={currentAsset.id}
@@ -226,7 +226,7 @@ export default function TrailerWatchPage() {
                                 </div>
 
                                 {/* Asset title bar */}
-                                <div className="bg-slate-900 border-t border-slate-800 px-8 py-6">
+                                <div className="bg-slate-900 border-t border-slate-800 px-8 py-6 mt-auto shrink-0">
                                     <div className="max-w-4xl mx-auto">
                                         <h2 className="text-xl font-bold">{currentAsset.title}</h2>
                                         <p className="mt-1 text-sm text-indigo-400">
@@ -236,7 +236,7 @@ export default function TrailerWatchPage() {
                                 </div>
 
                                 {/* Mobile enroll CTA */}
-                                <div className="sm:hidden bg-slate-900 border-t border-slate-800 px-6 py-4">
+                                <div className="sm:hidden bg-slate-900 border-t border-slate-800 px-6 py-4 shrink-0">
                                     <Link
                                         href={`/enroll/${courseId}`}
                                         className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 py-3 font-bold text-white"
@@ -247,7 +247,7 @@ export default function TrailerWatchPage() {
                                 </div>
                             </div>
                         ) : (
-                            <div className="flex h-full items-center justify-center">
+                            <div className="flex h-full flex-1 items-center justify-center min-h-[500px]">
                                 <PlayCircle className="h-20 w-20 text-slate-800 animate-pulse" />
                             </div>
                         )}
@@ -255,7 +255,7 @@ export default function TrailerWatchPage() {
 
                     {/* ── Sidebar — TRAILER ONLY ── */}
                     <div className={cn(
-                        "w-80 shrink-0 border-l border-slate-800 bg-slate-900 overflow-y-auto transition-all fixed lg:relative inset-y-0 right-0 z-50 lg:z-0 lg:translate-x-0 rtl:right-auto rtl:left-0 rtl:border-l-0 rtl:border-r",
+                        "border-l border-slate-800 bg-slate-900 overflow-y-auto transition-all fixed lg:relative inset-y-0 right-0 z-50 lg:z-0 lg:translate-x-0 rtl:right-auto rtl:left-0 rtl:border-l-0 rtl:border-r w-80 lg:w-auto",
                         sidebarOpen ? "translate-x-0" : "translate-x-full rtl:-translate-x-full"
                     )}>
                         {/* Sidebar header */}
