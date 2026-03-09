@@ -33,7 +33,7 @@ export function VideoPlayer({ assetId, lessonId, initialTime = 0 }: VideoPlayerP
     const { data, isLoading, error } = useQuery({
         queryKey: ['video-play', assetId],
         queryFn: async () => {
-            const response = await apiClient.get<{ data: { embedUrl: string } }>(`/courses/assets/${assetId}/play`);
+            const response = await apiClient.get<{ data: { embedUrl: string, isImage?: boolean, originalUrl?: string } }>(`/courses/assets/${assetId}/play`);
             return response.data.data;
         },
     });
@@ -107,6 +107,18 @@ export function VideoPlayer({ assetId, lessonId, initialTime = 0 }: VideoPlayerP
         return () => window.removeEventListener('message', handleMessage);
     }, [handleProgress]);
 
+    // Handle Image Auto-Completion Side Effect
+    const progressReportedRef = useRef(false);
+    useEffect(() => {
+        if (data?.isImage && !isCompleted && !progressReportedRef.current) {
+            progressReportedRef.current = true;
+            // Push to next tick to avoid synchronous React state update warning
+            setTimeout(() => {
+                handleProgress(1, 1, true, true);
+            }, 0);
+        }
+    }, [data?.isImage, isCompleted, handleProgress]);
+
     // Listen for fullscreen changes (user may exit via Esc key)
     useEffect(() => {
         const handleFullscreenChange = () => {
@@ -151,7 +163,7 @@ export function VideoPlayer({ assetId, lessonId, initialTime = 0 }: VideoPlayerP
 
     if (error || !data) return (
         <div className="flex items-center justify-center h-full text-red-500 bg-slate-900 flex-col gap-2">
-            <p>خطأ في تحميل الفيديو</p>
+            <p>خطأ في تحميل المحتوى</p>
             <button onClick={() => window.location.reload()} className="text-sm underline">إعادة المحاولة</button>
         </div>
     );
@@ -159,21 +171,30 @@ export function VideoPlayer({ assetId, lessonId, initialTime = 0 }: VideoPlayerP
     return (
         <div 
             ref={containerRef}
-            className="relative w-full h-full bg-black group overflow-hidden" 
+            className="relative w-full h-full bg-black flex items-center justify-center group overflow-hidden" 
             onContextMenu={(e) => e.preventDefault()}
         >
-            {/* Video Iframe - Native fullscreen and PiP DISABLED for security */}
-            <iframe
-                ref={iframeRef}
-                src={videoSrc || undefined}
-                className="absolute top-0 left-0 w-full h-full border-none z-0"
-                allow="accelerometer; gyroscope; autoplay; encrypted-media;"
-                referrerPolicy="strict-origin-when-cross-origin"
-                // @ts-ignore - HTML attributes for video security
-                disablePictureInPicture={true}
-                // @ts-ignore - Disable download, playback rate, and fullscreen controls
-                controlsList="nodownload noplaybackrate nofullscreen"
-            ></iframe>
+            {data.isImage ? (
+                /* Image Viewer */
+                 <img 
+                    src={data.originalUrl!} 
+                    alt="Lesson Image" 
+                    className="max-w-full max-h-[calc(100vh-200px)] object-contain z-0" 
+                 />
+            ) : (
+                /* Video Iframe - Native fullscreen and PiP DISABLED for security */
+                <iframe
+                    ref={iframeRef}
+                    src={videoSrc || undefined}
+                    className="absolute top-0 left-0 w-full h-full border-none z-0"
+                    allow="accelerometer; gyroscope; autoplay; encrypted-media;"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    // @ts-ignore - HTML attributes for video security
+                    disablePictureInPicture={true}
+                    // @ts-ignore - Disable download, playback rate, and fullscreen controls
+                    controlsList="nodownload noplaybackrate nofullscreen"
+                ></iframe>
+            )}
 
             {/* Dynamic Watermark */}
             <div className="absolute inset-0 pointer-events-none z-10 select-none overflow-hidden">
