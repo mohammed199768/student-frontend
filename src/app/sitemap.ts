@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 
 const BASE_URL = 'https://www.manalalhihi.com';
 const LOCALES = ['ar', 'en'] as const;
-const PUBLIC_PATHS = ['', '/contact', '/courses'] as const;
+const PUBLIC_PATHS = ['', '/contact', '/courses', '/trailer'] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const now = new Date();
