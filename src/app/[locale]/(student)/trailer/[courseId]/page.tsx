@@ -196,7 +196,7 @@ export default function TrailerCoursePage() {
                                                     <span className="flex-1">{lesson.title}</span>
                                                     {canWatchVideo && (
                                                         <Link
-                                                            href={`/learn/${courseId}`}
+                                                            href={`/trailer/${courseId}/watch` as any}
                                                             className="text-xs font-semibold text-indigo-600 hover:underline"
                                                         >
                                                             {isArabic ? 'مشاهدة' : 'Watch'}
