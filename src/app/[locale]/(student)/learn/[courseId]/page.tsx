@@ -58,9 +58,12 @@ export default function LearnPage() {
     const allAssets = useMemo(() => {
         if (!curriculum) return [];
         return curriculum.flatMap(s =>
-            s.lessons.flatMap(l =>
-                l.assets.map(a => ({ ...a, lessonId: l.id, isAdminLocked: l.isLockedForStudent }))
-            )
+            [
+                ...(s.assets || []).map(a => ({ ...a, isAdminLocked: false })),
+                ...s.lessons.flatMap(l =>
+                    l.assets.map(a => ({ ...a, lessonId: l.id, isAdminLocked: l.isLockedForStudent }))
+                )
+            ]
         );
     }, [curriculum]);
 
@@ -204,6 +207,42 @@ export default function LearnPage() {
                                         <h4 className="text-sm font-black text-slate-200">{section.title}</h4>
                                     </div>
                                     <div className="">
+                                        {(section.assets?.length ?? 0) > 0 && (
+                                            <div className="border-b border-slate-800/50">
+                                                <div className="px-6 py-3 bg-slate-900/50 text-xs font-bold text-slate-500">
+                                                    {t('section')} {sIdx + 1} Resources
+                                                </div>
+                                                <div className="divide-y divide-slate-800/30">
+                                                    {section.assets?.map(asset => {
+                                                        const isActive = currentAsset?.id === asset.id;
+
+                                                        return (
+                                                            <Link
+                                                                key={asset.id}
+                                                                href={`/learn/${courseId}?assetId=${asset.id}`}
+                                                                onClick={() => {
+                                                                    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+                                                                        setSidebarOpen(false);
+                                                                    }
+                                                                }}
+                                                                className={cn(
+                                                                    "flex items-center gap-3 px-8 py-3 transition-colors hover:bg-slate-800",
+                                                                    isActive && "bg-indigo-600 font-bold text-white",
+                                                                    !isActive && "text-slate-400"
+                                                                )}
+                                                            >
+                                                                {asset.type === 'VIDEO' ? <PlayCircle className="h-4 w-4 shrink-0" /> :
+                                                                    asset.type === 'PDF' ? <FileText className="h-4 w-4 shrink-0" /> :
+                                                                        asset.type === 'PPTX' ? <Presentation className="h-4 w-4 shrink-0 text-orange-400" /> :
+                                                                            <HelpCircle className="h-4 w-4 shrink-0" />}
+                                                                <span className="text-sm line-clamp-1">{asset.title}</span>
+                                                                {asset.isLocked && <Lock className="ml-auto h-3 w-3 opacity-50" />}
+                                                            </Link>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        )}
                                         {section.lessons.map(lesson => (
                                             <div key={lesson.id} className="border-b border-slate-800/50">
                                                 <div className="px-6 py-3 bg-slate-900/50 text-xs font-bold text-slate-500">

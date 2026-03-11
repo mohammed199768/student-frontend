@@ -45,6 +45,7 @@ export interface Section {
     id: string;
     title: string;
     order: number;
+    assets?: Asset[];
     lessons: Lesson[];
 }
 
