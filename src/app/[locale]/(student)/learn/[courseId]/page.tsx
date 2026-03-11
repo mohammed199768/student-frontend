@@ -74,6 +74,10 @@ export default function LearnPage() {
         return allAssets[0];
     }, [allAssets, assetId]);
 
+    const normalizeLessonTitle = (title: string) => (
+        title.startsWith('__lecture_assets__:') ? 'Resources' : title
+    );
+
     if (status === 'initializing') return <div className="p-20 text-center">{t('loading')}</div>;
     if (isLoading) return <div className="p-20 text-center">{t('loading')}</div>;
 
@@ -246,7 +250,7 @@ export default function LearnPage() {
                                         {section.lessons.map(lesson => (
                                             <div key={lesson.id} className="border-b border-slate-800/50">
                                                 <div className="px-6 py-3 bg-slate-900/50 text-xs font-bold text-slate-500">
-                                                    {lesson.title}
+                                                    {normalizeLessonTitle(lesson.title)}
                                                 </div>
                                                 <div className="divide-y divide-slate-800/30">
                                                     {lesson.assets.map(asset => {
